@@ -1,27 +1,69 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 interface RegisterFormData {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
+  showPassword: boolean,
   repeatPassword: string;
+  showRepeatPassword: boolean,
   jobField: string;
   phoneNumber: string;
 }
 
 const RegisterForm: React.FC = () => {
     const [emailError, setEmailError] = useState('');
-  const [formData, setFormData] = useState<RegisterFormData>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    repeatPassword: '',
-    jobField: '',
-    phoneNumber: '',
-  });
+    const [passwordValidated, setPasswordValidated] = useState(false)
+
+    const [passwordErrors, setPasswordErrors] = useState({
+      hasCapital: false,
+      hasLowercase: false,
+      hasNumber: false,
+      hasSpecialChar: false,
+    });
+
+    const [formData, setFormData] = useState<RegisterFormData>({
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      showPassword: false,
+      repeatPassword: '',
+      showRepeatPassword: false,
+      jobField: '',
+      phoneNumber: '',
+    });
+
+    const togglePasswordVisibility = (field: string) => {
+      setFormData((prevFormDataPassword:any) => ({
+        ...prevFormDataPassword,
+        [field]: !prevFormDataPassword[field],
+      }));
+    };
+
+    const validatePassword = (ev:any) => {
+      const password = ev.target.value
+      const errors = {
+        hasCapital: /[A-Z]/.test(password),
+        hasLowercase: /[a-z]/.test(password),
+        hasNumber: /\d/.test(password),
+        hasSpecialChar: /[!@#$%^&*]/.test(password),
+      };
+
+      if(!errors.hasCapital || !errors.hasLowercase || !errors.hasNumber || !errors.hasSpecialChar) {
+        setPasswordValidated(false)
+      } else {
+        setPasswordValidated(true)
+      }
+  
+      setPasswordErrors(errors);
+    };
+
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,13 +82,14 @@ const RegisterForm: React.FC = () => {
     } else {
       setEmailError('');
     }
-    // other validation checks
+    if (!passwordValidated) {
+      valid = false;
+    } 
     return valid;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (validateForm()) {
     // Perform validation here (e.g., email format, password match, etc.)
 
@@ -100,23 +143,58 @@ const RegisterForm: React.FC = () => {
       <div>
         <label>
           Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
+          <div className="password-field">
+            <input
+              type={formData.showPassword ? 'text' : 'password'}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              onInput={validatePassword}
+            />
+            <FontAwesomeIcon
+              icon={formData.showPassword ? faEyeSlash : faEye}
+              onClick={() => togglePasswordVisibility('showPassword')}
+            />
+          </div>
         </label>
+        </div>
+      <div>
+        <div style={{ color: passwordErrors.hasCapital ? 'green' : 'red' }}>
+          {passwordErrors.hasCapital
+            ? 'Contains at least one capital letter'
+            : 'Missing a capital letter'}
+        </div>
+        <div style={{ color: passwordErrors.hasLowercase ? 'green' : 'red' }}>
+          {passwordErrors.hasLowercase
+            ? 'Contains at least one lowercase letter'
+            : 'Missing a lowercase letter'}
+        </div>
+        <div style={{ color: passwordErrors.hasNumber ? 'green' : 'red' }}>
+          {passwordErrors.hasNumber
+            ? 'Contains at least one number'
+            : 'Missing a number'}
+        </div>
+        <div style={{ color: passwordErrors.hasSpecialChar ? 'green' : 'red' }}>
+          {passwordErrors.hasSpecialChar
+            ? 'Contains at least one special character'
+            : 'Missing a special character'}
+        </div>
       </div>
       <div>
         <label>
           Repeat Password:
-          <input
-            type="password"
-            name="repeatPassword"
-            value={formData.repeatPassword}
-            onChange={handleChange}
-          />
+          <div className="password-field">
+            <input
+              type={formData.showRepeatPassword ? 'text' : 'password'}
+              name="repeatPassword"
+              value={formData.repeatPassword}
+              onChange={handleChange}
+            />
+            <FontAwesomeIcon
+              icon={formData.showRepeatPassword ? faEyeSlash : faEye}
+              onClick={() => togglePasswordVisibility('showRepeatPassword')}
+            />
+          </div>
         </label>
       </div>
       <div>
