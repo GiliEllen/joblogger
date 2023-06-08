@@ -6,17 +6,19 @@ const saltRounds = 10;
 
 export async function register(req: express.Request, res: express.Response) {
   try {
-    const { email, password } = req.body;
-    if (!email || !password)
+    const { formData } = req.body;
+    console.log(formData)
+    const {firstName, lastName, email, password, jobField, phoneNumber, repeatPassword} = formData
+    if (!email || !password || !firstName || !lastName || !jobField || !phoneNumber || !repeatPassword)
       throw new Error("Couldn't get all fields from req.body");
 
-    const { error } = UserValidation.validate({ email, password });
+    const { error } = UserValidation.validate({ email, password, firstName, lastName, jobField, phoneNumber, repeatPassword });
     if (error) throw error;
 
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
 
-    const userDB = new UserModel({ email, password: hash });
+    const userDB = new UserModel({ email, password: hash, firstName, lastName, jobField, phoneNumber });
     await userDB.save();
 
     //sending cookie

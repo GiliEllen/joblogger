@@ -94,7 +94,8 @@ const RegisterForm: React.FC = () => {
     // Perform validation here (e.g., email format, password match, etc.)
 
     try {
-      const response = await axios.post('/api/users/register', formData);
+      console.log(formData)
+      const response = await axios.post('/api/users/register', {formData});
       console.log('Registration successful:', response.data);
       // Handle success (e.g., show a success message, redirect, etc.)
     } catch (error) {
