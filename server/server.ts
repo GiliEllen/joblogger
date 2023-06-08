@@ -29,6 +29,8 @@ app.use(cookieParser());
 
 import usersRoutes from "./API/users/usersRoutes";
 app.use("/api/users", usersRoutes);
+import jobsRoutes from "./API/jobs/jobsRoutes";
+app.use("/api/jobs", jobsRoutes);
 
 app.listen(PORT, () => {
   console.log(`server is active on port : ${PORT}`);

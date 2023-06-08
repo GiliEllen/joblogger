@@ -3,6 +3,10 @@ import JobModel from "./jobsModel";
 
 export async function addJob(req, res) {
   try {
+
+    const {formData}  =req.body;
+
+    console.log(formData)
     const {
       company_name,
       company_description,
@@ -14,7 +18,7 @@ export async function addJob(req, res) {
       date_interview,
       notes,
       cv,
-    } = req.body;
+    } = formData;
     const { userId } = req.params;
     if (!userId)
       throw new Error(
@@ -22,6 +26,7 @@ export async function addJob(req, res) {
       );
 
     const jobDB = new JobModel({
+        userId,
       company_name,
       company_description,
       title,
