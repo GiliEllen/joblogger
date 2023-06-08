@@ -1,5 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { useAppSelector } from '../app/hooks';
+import { userSelector } from '../features/user/userSlice';
 
 interface FormData {
   company_name: string;
@@ -17,6 +19,7 @@ interface FormData {
 
 
 const AddJob = () => {
+    const user = useAppSelector(userSelector)
   const [formData, setFormData] = useState<FormData>({
     company_name: '',
     company_description: '',
@@ -41,7 +44,7 @@ const AddJob = () => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const userId = 1
+    const userId = user?._id
     const url = `/api/jobs/${userId}`;
 
     // const data = new FormData();
