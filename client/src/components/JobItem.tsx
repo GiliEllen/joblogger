@@ -1,4 +1,6 @@
 import React, { FC } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
 interface JobItemProps {
   item: any;
@@ -27,6 +29,10 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
       <p>{date_CV_sent}</p>
       <h3>notes</h3>
       <p>{notes}</p>
+      <FontAwesomeIcon icon={faEllipsisVertical} />
+      <button>Edit Job</button>
+      <button>Delete</button>
+      <button>Archive</button>
     </div>
   );
 };

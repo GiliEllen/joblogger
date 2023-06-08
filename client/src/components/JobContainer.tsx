@@ -22,7 +22,7 @@ const JobContainer = () => {
 
   useEffect(() => {
     handleGetAllUserJobs();
-  }, []);
+  }, [user]);
 
   return (
     <div>
