@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-interface LoginFormProps {
-  onLogin: (email: string, password: string) => void;
-}
+// interface LoginFormProps {
+//   onLogin: (email: string, password: string) => void;
+// }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -16,9 +20,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onLogin(email, password);
+    const { data } = await axios.post("/api/users/login", { email, password });
+
+    if (data.login) {
+      navigate("/home");
+    }
   };
 
   return (

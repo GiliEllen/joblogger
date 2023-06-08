@@ -13,7 +13,13 @@ const JobSchema = new mongoose.Schema({
   connection: String,
   date_CV_sent: Date,
   date_interview: Array<Date>,
-  notes: String
+  notes: String,
+  status: {
+    type:String,
+    enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired']
+  },
+  cv: Object,
+  
 });
 
 const JobModel = mongoose.model("users", JobSchema);

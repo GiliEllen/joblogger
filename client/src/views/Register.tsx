@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterFormData {
   firstName: string;
@@ -16,6 +17,8 @@ interface RegisterFormData {
 }
 
 const RegisterForm: React.FC = () => {
+
+  const navigate = useNavigate();
     const [emailError, setEmailError] = useState('');
     const [passwordValidated, setPasswordValidated] = useState(false)
 
@@ -97,7 +100,9 @@ const RegisterForm: React.FC = () => {
       console.log(formData)
       const response = await axios.post('/api/users/register', {formData});
       console.log('Registration successful:', response.data);
-      // Handle success (e.g., show a success message, redirect, etc.)
+      if (response.data.register) {
+        navigate("/home");
+      }
     } catch (error) {
       console.error('Registration failed:', error);
       // Handle error (e.g., show an error message, reset form, etc.)
