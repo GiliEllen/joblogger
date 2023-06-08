@@ -3,10 +3,9 @@ import JobModel from "./jobsModel";
 
 export async function addJob(req, res) {
   try {
+    const { formData } = req.body;
 
-    const {formData}  =req.body;
-
-    console.log(formData)
+    console.log(formData);
     const {
       company_name,
       company_description,
@@ -26,7 +25,7 @@ export async function addJob(req, res) {
       );
 
     const jobDB = new JobModel({
-        userId,
+      userId,
       company_name,
       company_description,
       title,
@@ -53,6 +52,23 @@ export async function getAllJobsByUserId(req, res) {
     const jobsDB = await JobModel.find({ userId });
 
     res.send({ jobsDB });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}
+
+export async function getJobByID(req, res) {
+  try {
+    const { jobId } = req.params;
+    if (!jobId)
+      throw new Error("no jobId from params on getJobById in jobsCtrl");
+
+    const jobDB = await JobModel.findById(jobId);
+    if (!jobDB || jobDB.title.length == 0) {
+      res.send({ jobDB: "no job" });
+    } else {
+      res.send({ jobDB });
+    }
   } catch (error) {
     res.status(500).send({ error: error.message });
   }

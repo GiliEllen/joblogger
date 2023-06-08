@@ -1,6 +1,7 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import JobForm from "./JobForm";
 
 interface JobItemProps {
   item: any;
@@ -15,7 +16,9 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
     connection,
     date_CV_sent,
     notes,
+    _id
   } = item;
+  const [visibleEdit, setVisibleEdit] = useState<boolean>(false)
   return (
     <div>
       <h1>{title}</h1>
@@ -30,9 +33,10 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
       <h3>notes</h3>
       <p>{notes}</p>
       <FontAwesomeIcon icon={faEllipsisVertical} />
-      <button>Edit Job</button>
+      <button onClick={() => setVisibleEdit(!visibleEdit)}>Edit Job</button>
       <button>Delete</button>
       <button>Archive</button>
+      {visibleEdit ? <JobForm type="edit" jobId={_id}/> : null}
     </div>
   );
 };

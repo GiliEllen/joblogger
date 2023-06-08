@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, FC } from "react";
+import React, { useState, ChangeEvent, FormEvent, FC, useEffect } from "react";
 import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
@@ -18,9 +18,10 @@ interface FormData {
 
 interface JobFormProps {
   type: "add" | "edit";
+  jobId?: string
 }
 
-const JobForm: FC<JobFormProps> = ({ type }) => {
+const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
   const user = useAppSelector(userSelector);
   const [formData, setFormData] = useState<FormData>({
     company_name: "",
@@ -69,6 +70,22 @@ const JobForm: FC<JobFormProps> = ({ type }) => {
       }
     }
   };
+
+  const handleGetFormInformation = async () => {
+    try {
+      const {data} = await axios.get(`/api/jobs/job/${jobId}`)
+      console.log(data)
+      setFormData(data.jobDB)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (type == "edit") {
+      handleGetFormInformation()
+    }
+  },[])
 
   return (
     <form onSubmit={handleSubmit}>

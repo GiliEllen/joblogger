@@ -1,11 +1,12 @@
 import express from "express";
-import { addJob, getAllJobsByUserId } from "./jobsCtrl";
+import { addJob, getAllJobsByUserId, getJobByID } from "./jobsCtrl";
 
 const router = express.Router();
 
 router
   .post("/:userId", addJob)
-  .get("/:userId", getAllJobsByUserId)
+  .get("/user/:userId", getAllJobsByUserId)
+  .get("/job/:jobId", getJobByID)
 
 
 export default router;

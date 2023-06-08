@@ -12,7 +12,7 @@ const JobContainer = () => {
   const handleGetAllUserJobs = async () => {
     try {
       const userId = user?._id;
-      const { data } = await axios.get(`/api/jobs/${userId}`);
+      const { data } = await axios.get(`/api/jobs/user/${userId}`);
       console.log(data);
       setJobs(data.jobsDB);
     } catch (error) {

@@ -1,17 +1,11 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
-import { useAppSelector } from '../app/hooks';
-import { userSelector } from '../features/user/userSlice';
-import JobForm from './JobForm';
-
-
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import axios from "axios";
+import { useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlice";
+import JobForm from "./JobForm";
 
 const AddJob = () => {
-    const user = useAppSelector(userSelector)
-
-  return (
-    <JobForm type='add'/>
-  );
+  return <JobForm type="add" />;
 };
 
 export default AddJob;
