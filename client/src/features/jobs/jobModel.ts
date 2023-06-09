@@ -18,5 +18,6 @@ export interface Job {
   date_interview: Array<Date>;
   notes: string;
   status: JobStatus;
-  cv?: Object;
+  cv?: object;
+  archive: boolean
 }

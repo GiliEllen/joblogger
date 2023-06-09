@@ -1,3 +1,4 @@
+import { boolean } from "joi";
 import mongoose from "mongoose";
 
 const JobSchema = new mongoose.Schema({
@@ -19,7 +20,7 @@ const JobSchema = new mongoose.Schema({
     enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired']
   },
   cv: Object,
-  
+  archive: Boolean
 });
 
 const JobModel = mongoose.model("jobs", JobSchema);

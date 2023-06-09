@@ -5,9 +5,10 @@ import JobForm from "./JobForm";
 
 interface JobItemProps {
   item: any;
+  handleArchive: CallableFunction
 }
 
-const JobItem: FC<JobItemProps> = ({ item }) => {
+const JobItem: FC<JobItemProps> = ({ item, handleArchive }) => {
   const {
     company_name,
     title,
@@ -35,7 +36,7 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
       <FontAwesomeIcon icon={faEllipsisVertical} />
       <button onClick={() => setVisibleEdit(!visibleEdit)}>Edit Job</button>
       <button>Delete</button>
-      <button>Archive</button>
+      <button onClick={() => handleArchive(_id)}>Archive</button>
       {visibleEdit ? <JobForm type="edit" jobId={_id}/> : null}
     </div>
   );

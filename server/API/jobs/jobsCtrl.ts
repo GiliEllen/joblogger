@@ -36,6 +36,7 @@ export async function addJob(req, res) {
       date_interview: null,
       notes,
       cv: null,
+      archive: false
     });
     await jobDB.save();
 
@@ -71,5 +72,22 @@ export async function getJobByID(req, res) {
     }
   } catch (error) {
     res.status(500).send({ error: error.message });
+  }
+}
+export async function archiveJob(req, res) {
+  try {
+    const { jobId } = req.params;
+    if (!jobId)
+      throw new Error("no jobId from params on getJobById in jobsCtrl");
+
+    const jobDB = await JobModel.findById(jobId);
+    if (!jobDB || jobDB.title.length == 0) {
+      res.send({ jobDB: "no job" });
+    }
+    jobDB.archive = true;
+    await jobDB.save()
+    res.send({archive: true})
+  } catch (error) {
+    res.status(500).send({ error: error.message, archive: false });
   }
 }

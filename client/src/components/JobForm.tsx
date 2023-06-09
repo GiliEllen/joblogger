@@ -18,7 +18,7 @@ interface FormData {
 
 interface JobFormProps {
   type: "add" | "edit";
-  jobId?: string
+  jobId?: string;
 }
 
 const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
@@ -35,6 +35,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
     notes: "",
     cv: null,
   });
+  const [archive, setArchive] = useState<boolean>(false);
 
   const handleChange = (event: any) => {
     const { name, value } = event.target;
@@ -73,19 +74,20 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
 
   const handleGetFormInformation = async () => {
     try {
-      const {data} = await axios.get(`/api/jobs/job/${jobId}`)
-      console.log(data)
-      setFormData(data.jobDB)
+      const { data } = await axios.get(`/api/jobs/job/${jobId}`);
+      console.log(data);
+      setFormData(data.jobDB);
+      setArchive(data.jobDB.archive);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     if (type == "edit") {
-      handleGetFormInformation()
+      handleGetFormInformation();
     }
-  },[])
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>
