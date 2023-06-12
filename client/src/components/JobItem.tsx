@@ -3,13 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import JobForm from "./JobForm";
 import axios from "axios";
+import { useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlice";
 
 interface JobItemProps {
   item: any;
-  handleArchive: CallableFunction;
+
 }
 
-const JobItem: FC<JobItemProps> = ({ item, handleArchive }) => {
+const JobItem: FC<JobItemProps> = ({ item }) => {
   const {
     company_name,
     title,
@@ -19,10 +21,14 @@ const JobItem: FC<JobItemProps> = ({ item, handleArchive }) => {
     date_CV_sent,
     notes,
     _id,
+    archive
   } = item;
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
   const [visibleConsent, setVisibleConsent] = useState<boolean>(false);
   const [deleteConsent, setDeleteConsent] = useState<string>("");
+  const [archivedJob, setArchivedJob] = useState<boolean>(archive)
+
+  const user = useAppSelector(userSelector)
 
   const handleGetConsent = () => {
     setVisibleConsent(!visibleConsent);
@@ -35,6 +41,23 @@ const JobItem: FC<JobItemProps> = ({ item, handleArchive }) => {
         const { data } = await axios.delete(`/api/jobs/job/${jobId}`);
         console.log(data)
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleArchive = async (jobId: string) => {
+    try {
+      if (user) {
+        const userId = user?._id;
+        const { data } = await axios.put(`/api/jobs/job/${jobId}`);
+        console.log(data)
+        setArchivedJob(data.archive)
+        if (data.archive) {
+          console.log("archived successfully");
+        }
+      }
+      
     } catch (error) {
       console.error(error);
     }
@@ -56,7 +79,7 @@ const JobItem: FC<JobItemProps> = ({ item, handleArchive }) => {
       <button onClick={() => setVisibleEdit(!visibleEdit)}>Edit Job</button>
       <button onClick={() => handleGetConsent()}>Delete</button>
       <button onClick={() => handleArchive(_id)}>Archive</button>
-      {visibleEdit ? <JobForm type="edit" jobId={_id} /> : null}
+      {visibleEdit ? <JobForm type="edit" jobId={_id} archivedJob={archivedJob} setArchivedJob={setArchivedJob}/> : null}
       {visibleConsent ? (
         <div>
           <h5>Are you sure you want to delete this job?</h5>

@@ -5,9 +5,12 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
 import { Job } from "../features/jobs/jobModel";
 import { getAllJobs } from "../features/jobs/jobApi";
+import { archiveJob, jobArraySelector } from "../features/jobs/jobSlice";
 
 const JobContainer = () => {
   const [jobs, setJobs] = useState([]);
+
+  const jobsList = useAppSelector(jobArraySelector)
   const user = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
 
@@ -25,17 +28,7 @@ const JobContainer = () => {
     }
   };
 
-  const handleArchiveJob = async (jobId: string) => {
-    try {
-      const { data } = await axios.put(`/api/jobs/job/${jobId}`);
-      console.log(data)
-      if (data.archive) {
-        console.log("archived successfully");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
 
 
 
@@ -47,12 +40,11 @@ const JobContainer = () => {
     <div>
       <h1>Jobs</h1>
       <div>
-        {jobs.map((job: Job) => {
+        {jobsList && jobsList.map((job: Job) => {
           return (
             <JobItem
               key={job._id}
               item={job}
-              handleArchive={handleArchiveJob}
             />
           );
         })}

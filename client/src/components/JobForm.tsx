@@ -19,9 +19,11 @@ interface FormData {
 interface JobFormProps {
   type: "add" | "edit";
   jobId?: string;
+  archivedJob?: boolean
+  setArchivedJob? : CallableFunction
 }
 
-const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
+const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob }) => {
   const user = useAppSelector(userSelector);
   const [formData, setFormData] = useState<FormData>({
     company_name: "",
@@ -35,12 +37,14 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
     notes: "",
     cv: null,
   });
-  const [archive, setArchive] = useState<boolean>(false);
+  // const [archive, setArchive] = useState<boolean>(false);
 
   const handleUnarchive = async (jobId: string) => {
     try {
       const { data } = await axios.put(`/api/jobs/job/${jobId}`);
-      console.log(data)
+      if (setArchivedJob) {
+        setArchivedJob(false)
+      }
     } catch (error) {
       console.error(error);
     }
@@ -86,7 +90,9 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
       const { data } = await axios.get(`/api/jobs/job/${jobId}`);
       console.log(data);
       setFormData(data.jobDB);
-      setArchive(data.jobDB.archive);
+      if (setArchivedJob) {
+        setArchivedJob(data.jobDB.archive)
+      }
     } catch (error) {
       console.error(error);
     }
@@ -107,7 +113,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="company_name"
           value={formData.company_name}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -117,7 +123,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="company_description"
           value={formData.company_description}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -128,7 +134,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -138,7 +144,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="title_description"
           value={formData.title_description}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -149,7 +155,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="jobField"
           value={formData.jobField}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -160,7 +166,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="connection"
           value={formData.connection}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -171,7 +177,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="date_CV_sent"
           value={formData.date_CV_sent}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -182,7 +188,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="date_interview"
           value={formData.date_interview}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -192,7 +198,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="notes"
           value={formData.notes}
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
@@ -202,15 +208,15 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           type="file"
           name="cv"
           onChange={handleChange}
-          disabled={archive}
+          disabled={archivedJob}
         />
       </label>
 
-      <button type="submit" disabled={archive}>
+      <button type="submit" disabled={archivedJob}>
         Submit
       </button>
 
-      {archive ? (
+      {archivedJob ? (
         <>
           <p>
             This job is archived and cannot be changed. would you like to an
