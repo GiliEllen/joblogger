@@ -37,6 +37,15 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
   });
   const [archive, setArchive] = useState<boolean>(false);
 
+  const handleUnarchive = async (jobId: string) => {
+    try {
+      const { data } = await axios.put(`/api/jobs/job/${jobId}`);
+      console.log(data)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChange = (event: any) => {
     const { name, value } = event.target;
     if (name === "cv") {
@@ -98,6 +107,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="company_name"
           value={formData.company_name}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -107,6 +117,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="company_description"
           value={formData.company_description}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -117,6 +128,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="title"
           value={formData.title}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -126,6 +138,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="title_description"
           value={formData.title_description}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -136,6 +149,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="jobField"
           value={formData.jobField}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -146,6 +160,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="connection"
           value={formData.connection}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -156,6 +171,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="date_CV_sent"
           value={formData.date_CV_sent}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
@@ -166,20 +182,49 @@ const JobForm: FC<JobFormProps> = ({ type, jobId }) => {
           name="date_interview"
           value={formData.date_interview}
           onChange={handleChange}
+          disabled={archive}
         />
       </label>
 
       <label>
         Notes:
-        <textarea name="notes" value={formData.notes} onChange={handleChange} />
+        <textarea
+          name="notes"
+          value={formData.notes}
+          onChange={handleChange}
+          disabled={archive}
+        />
       </label>
 
       <label>
         CV:
-        <input type="file" name="cv" onChange={handleChange} />
+        <input
+          type="file"
+          name="cv"
+          onChange={handleChange}
+          disabled={archive}
+        />
       </label>
 
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={archive}>
+        Submit
+      </button>
+
+      {archive ? (
+        <>
+          <p>
+            This job is archived and cannot be changed. would you like to an
+            archive it?
+          </p>
+          <button
+            onClick={() => {
+              if (jobId) handleUnarchive(jobId);
+            }}
+          >
+            Unarchive
+          </button>
+        </>
+      ) : null}
     </form>
   );
 };

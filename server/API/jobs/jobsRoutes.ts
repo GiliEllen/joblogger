@@ -1,5 +1,5 @@
 import express from "express";
-import { addJob, archiveJob, getAllJobsByUserId, getJobByID } from "./jobsCtrl";
+import { addJob, toggleArchiveJob, getAllJobsByUserId, getJobByID } from "./jobsCtrl";
 
 const router = express.Router();
 
@@ -9,6 +9,6 @@ router
   .get("/user/:userId", getAllJobsByUserId)
 
   .get("/job/:jobId", getJobByID)
-  .put("/job/:jobId", archiveJob);
+  .put("/job/:jobId", toggleArchiveJob);
 
 export default router;

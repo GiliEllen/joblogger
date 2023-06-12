@@ -28,7 +28,8 @@ const JobContainer = () => {
   const handleArchiveJob = async (jobId: string) => {
     try {
       const { data } = await axios.put(`/api/jobs/job/${jobId}`);
-      if (data.archived) {
+      console.log(data)
+      if (data.archive) {
         console.log("archived successfully");
       }
     } catch (error) {

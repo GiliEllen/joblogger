@@ -74,7 +74,7 @@ export async function getJobByID(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
-export async function archiveJob(req, res) {
+export async function toggleArchiveJob(req, res) {
   try {
     const { jobId } = req.params;
     if (!jobId)
@@ -84,9 +84,13 @@ export async function archiveJob(req, res) {
     if (!jobDB || jobDB.title.length == 0) {
       res.send({ jobDB: "no job" });
     }
-    jobDB.archive = true;
+    jobDB.archive = !jobDB.archive;
     await jobDB.save()
-    res.send({archive: true})
+    if(jobDB.archive) {
+      res.send({archive: true})
+    } else {
+      res.send({archive: false})
+    }
   } catch (error) {
     res.status(500).send({ error: error.message, archive: false });
   }
