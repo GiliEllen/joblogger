@@ -37,6 +37,8 @@ const JobContainer = () => {
     }
   };
 
+
+
   useEffect(() => {
     handleGetAllUserJobs();
   }, [user]);

@@ -95,3 +95,16 @@ export async function toggleArchiveJob(req, res) {
     res.status(500).send({ error: error.message, archive: false });
   }
 }
+
+export async function deleteJobById(req, res) {
+  try {
+    const { jobId } = req.params;
+    if (!jobId)
+      throw new Error("no jobId from params on getJobById in jobsCtrl");
+      const result = await JobModel.findByIdAndDelete(jobId);
+
+      res.send({result})
+  } catch (error) {
+    res.status(500).send({ error: error.message, archive: false });
+  }
+}
