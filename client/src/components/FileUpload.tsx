@@ -16,12 +16,16 @@ function FileUpload() {
         return;
       }
 
-      console.log(file);
+      console.log(file)
 
       const fd = new FormData();
-      fd.append("file", file, file.name);
+      fd.append('file', file, file.name);
+    
 
-      const { data } = await axios.post("/upload", fd);
+      const { data } = await axios.post(
+        "/upload",
+        fd
+      );
 
       console.log(data);
     } catch (error) {
@@ -31,7 +35,7 @@ function FileUpload() {
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} name="file" />
+      <input type="file" onChange={handleFileChange} name="file"/>
 
       <div>{file && `${file.name} - ${file.type}`}</div>
 
