@@ -1,28 +1,32 @@
-import React, { useState, useRef } from 'react';
-import Dropzone from 'react-dropzone';
-import axios from 'axios';
+import React, { useState, useRef } from "react";
+import Dropzone from "react-dropzone";
+import axios from "axios";
+import { useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlice";
 // import { Form, Row, Col, Button } from 'react-bootstrap';
 // import { API_URL } from '../utils/constants';
 
-const FileUpload = ({props}:any) => {
-  const [file, setFile] = useState(null); // state for storing actual image
-  const [previewSrc, setPreviewSrc] = useState(''); // state for storing previewImage
-  const [state, setState] = useState({
-    title: '',
-    description: ''
+const FileUpload = ({ props }: any) => {
+  const [file, setFile] = useState<any>(null); // state for storing actual image
+  const [previewSrc, setPreviewSrc] = useState<any>(""); // state for storing previewImage
+  const [state, setState] = useState<any>({
+    title: "",
+    description: "",
   });
-  const [errorMsg, setErrorMsg] = useState('');
-  const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
-  const dropRef = useRef(); // React ref for managing the hover state of droppable area
+  const [errorMsg, setErrorMsg] = useState<any>("");
+  const [isPreviewAvailable, setIsPreviewAvailable] = useState<any>(false); // state to show preview only for images
+  const dropRef = useRef<any>(); // React ref for managing the hover state of droppable area
+  const user = useAppSelector(userSelector)
 
-  const handleInputChange = (event) => {
+
+  const handleInputChange = (event: any) => {
     setState({
       ...state,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
-  const onDrop = (files) => {
+  const onDrop = (files: any) => {
     const [uploadedFile] = files;
     setFile(uploadedFile);
 
@@ -32,85 +36,90 @@ const FileUpload = ({props}:any) => {
     };
     fileReader.readAsDataURL(uploadedFile);
     setIsPreviewAvailable(uploadedFile.name.match(/\.(jpeg|jpg|png)$/));
-    dropRef.current.style.border = '2px dashed #e9ebeb';
+    dropRef.current.style.border = "2px dashed #e9ebeb";
   };
 
-  const updateBorder = (dragState) => {
-    if (dragState === 'over') {
-      dropRef.current.style.border = '2px solid #000';
-    } else if (dragState === 'leave') {
-      dropRef.current.style.border = '2px dashed #e9ebeb';
+  const updateBorder = (dragState: any) => {
+    if (dragState === "over") {
+      dropRef.current.style.border = "2px solid #000";
+    } else if (dragState === "leave") {
+      dropRef.current.style.border = "2px dashed #e9ebeb";
     }
   };
 
-  const handleOnSubmit = async (event) => {
+  const handleOnSubmit = async (event: any) => {
     event.preventDefault();
 
     try {
       const { title, description } = state;
-      if (title.trim() !== '' && description.trim() !== '') {
+      if (title.trim() !== "" && description.trim() !== "") {
         if (file) {
+          let userId = ""
+          if (user) {
+            userId = user._id
+          }
           const formData = new FormData();
-          formData.append('file', file);
-          formData.append('title', title);
-          formData.append('description', description);
+          formData.append("file", file);
+          formData.append("title", title);
+          formData.append("description", description);
+          formData.append("userId", userId)
 
-          setErrorMsg('');
-          await axios.post(`${API_URL}/upload`, formData, {
+          setErrorMsg("");
+          await axios.post(`/api/cv/upload`, formData, {
             headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+              "Content-Type": "multipart/form-data",
+            },
           });
-          props.history.push('/list');
+          props.history.push("/list");
         } else {
-          setErrorMsg('Please select a file to add.');
+          setErrorMsg("Please select a file to add.");
         }
       } else {
-        setErrorMsg('Please enter all the field values.');
+        setErrorMsg("Please enter all the field values.");
       }
-    } catch (error) {
+    } catch (error: any) {
       error.response && setErrorMsg(error.response.data);
     }
   };
 
   return (
     <React.Fragment>
-      <Form className="search-form" onSubmit={handleOnSubmit}>
+      <form className="search-form" onSubmit={handleOnSubmit}>
         {errorMsg && <p className="errorMsg">{errorMsg}</p>}
-        <Row>
-          <Col>
-            <Form.Group controlId="title">
-              <Form.Control
+        <div>
+          <div>
+            <label htmlFor="title">
+              <input
                 type="text"
                 name="title"
-                value={state.title || ''}
+                value={state.title || ""}
                 placeholder="Enter title"
                 onChange={handleInputChange}
               />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Group controlId="description">
-              <Form.Control
+            </label>
+          </div>
+        </div>
+        <div>
+          <div>
+            <label htmlFor="description">
+              <input
                 type="text"
                 name="description"
-                value={state.description || ''}
+                value={state.description || ""}
                 placeholder="Enter description"
                 onChange={handleInputChange}
               />
-            </Form.Group>
-          </Col>
-        </Row>
+            </label>
+          </div>
+        </div>
         <div className="upload-section">
           <Dropzone
             onDrop={onDrop}
-            onDragEnter={() => updateBorder('over')}
-            onDragLeave={() => updateBorder('leave')}
+            onDragEnter={() => updateBorder("over")}
+            onDragLeave={() => updateBorder("leave")}
           >
             {({ getRootProps, getInputProps }) => (
-              <div {...getRootProps({ className: 'drop-zone' })} ref={dropRef}>
+              <div {...getRootProps({ className: "drop-zone" })} ref={dropRef}>
                 <input {...getInputProps()} />
                 <p>Drag and drop a file OR click here to select a file</p>
                 {file && (
@@ -137,10 +146,8 @@ const FileUpload = ({props}:any) => {
             </div>
           )}
         </div>
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
+        <button type="submit">Submit</button>
+      </form>
     </React.Fragment>
   );
 };
