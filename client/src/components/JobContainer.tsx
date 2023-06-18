@@ -20,7 +20,7 @@ const JobContainer = () => {
         const userId = user?._id;
         const { data } = await axios.get(`/api/jobs/user/${userId}`);
         console.log(data);
-        setJobs(data.jobsDB);
+        setJobs(data.jobsDB.jobs);
         dispatch(getAllJobs({ userId }));
       }
     } catch (error) {
@@ -40,11 +40,12 @@ const JobContainer = () => {
     <div>
       <h1>Jobs</h1>
       <div>
-        {jobsList && jobsList.map((job: Job) => {
+        {jobsList && jobsList.map((job: any) => {
           return (
             <JobItem
-              key={job._id}
-              item={job}
+              key={job.job._id}
+              item={job.job}
+              cv={job.cvFile[0]}
             />
           );
         })}

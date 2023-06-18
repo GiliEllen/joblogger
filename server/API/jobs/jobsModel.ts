@@ -20,7 +20,8 @@ const JobSchema = new mongoose.Schema({
     enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired']
   },
   cv: String,
-  archive: Boolean
+  archive: Boolean,
+
 });
 
 const JobModel = mongoose.model("jobs", JobSchema);

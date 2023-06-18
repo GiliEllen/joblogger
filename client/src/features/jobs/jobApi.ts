@@ -13,6 +13,7 @@ export const getAllJobs = createAsyncThunk(
           "Couldn't receive data from axios GET '/api/jobs/user/userId' from: jobsAPI "
         ); 
       const { jobsDB } = data;
+
       return jobsDB;
     } catch (error: any) {
       console.error(error);

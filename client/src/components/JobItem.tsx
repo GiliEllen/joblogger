@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import JobForm from "./JobForm";
@@ -8,10 +8,10 @@ import { userSelector } from "../features/user/userSlice";
 
 interface JobItemProps {
   item: any;
-
+  cv: any
 }
 
-const JobItem: FC<JobItemProps> = ({ item }) => {
+const JobItem: FC<JobItemProps> = ({ item, cv }) => {
   const {
     company_name,
     title,
@@ -21,14 +21,14 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
     date_CV_sent,
     notes,
     _id,
-    archive
+    archive,
   } = item;
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
   const [visibleConsent, setVisibleConsent] = useState<boolean>(false);
   const [deleteConsent, setDeleteConsent] = useState<string>("");
-  const [archivedJob, setArchivedJob] = useState<boolean>(archive)
+  const [archivedJob, setArchivedJob] = useState<boolean>(archive);
 
-  const user = useAppSelector(userSelector)
+  const user = useAppSelector(userSelector);
 
   const handleGetConsent = () => {
     setVisibleConsent(!visibleConsent);
@@ -39,7 +39,7 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
       console.log(deleteConsent);
       if (deleteConsent === "Yes") {
         const { data } = await axios.delete(`/api/jobs/job/${jobId}`);
-        console.log(data)
+        console.log(data);
       }
     } catch (error) {
       console.error(error);
@@ -51,13 +51,12 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
       if (user) {
         const userId = user?._id;
         const { data } = await axios.put(`/api/jobs/job/${jobId}`);
-        console.log(data)
-        setArchivedJob(data.archive)
+        console.log(data);
+        setArchivedJob(data.archive);
         if (data.archive) {
           console.log("archived successfully");
         }
       }
-      
     } catch (error) {
       console.error(error);
     }
@@ -75,11 +74,23 @@ const JobItem: FC<JobItemProps> = ({ item }) => {
       <p>{date_CV_sent}</p>
       <h3>notes</h3>
       <p>{notes}</p>
+      <h3>Cv file</h3>
+      {cv ? <div>
+        <p>{cv.fileName}</p>
+        <p>{cv.fileDescription}</p>
+      </div>: <p>No file was uploaded</p>}
       <FontAwesomeIcon icon={faEllipsisVertical} />
       <button onClick={() => setVisibleEdit(!visibleEdit)}>Edit Job</button>
       <button onClick={() => handleGetConsent()}>Delete</button>
       <button onClick={() => handleArchive(_id)}>Archive</button>
-      {visibleEdit ? <JobForm type="edit" jobId={_id} archivedJob={archivedJob} setArchivedJob={setArchivedJob}/> : null}
+      {visibleEdit ? (
+        <JobForm
+          type="edit"
+          jobId={_id}
+          archivedJob={archivedJob}
+          setArchivedJob={setArchivedJob}
+        />
+      ) : null}
       {visibleConsent ? (
         <div>
           <h5>Are you sure you want to delete this job?</h5>
