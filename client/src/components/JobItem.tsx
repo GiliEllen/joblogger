@@ -28,6 +28,8 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
   const [deleteConsent, setDeleteConsent] = useState<string>("");
   const [archivedJob, setArchivedJob] = useState<boolean>(archive);
 
+  const [file, setFile] = useState<any>()
+
   const user = useAppSelector(userSelector);
 
   const handleGetConsent = () => {
@@ -61,6 +63,16 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
       console.error(error);
     }
   };
+
+  const handleDownloadResume = async () => {
+    const fileId = cv.fileId
+    fetch(`/api/cv/download/${fileId}`)
+      .then(res => res.blob())
+      .then(data => {
+        setFile(data);
+      })
+  }
+
   return (
     <div>
       <h1>{title}</h1>
@@ -78,6 +90,8 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
       {cv ? <div>
         <p>{cv.fileName}</p>
         <p>{cv.fileDescription}</p>
+        <button onClick={handleDownloadResume}>download file</button>
+        {file ? <a href="" download/> : null}
       </div>: <p>No file was uploaded</p>}
       <FontAwesomeIcon icon={faEllipsisVertical} />
       <button onClick={() => setVisibleEdit(!visibleEdit)}>Edit Job</button>

@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 // const conn = mongoose.createConnection(mongodb_uri);
 
-let gfs;
+export let gfs;
 
 mongoose.set("strictQuery", true);
 
@@ -31,9 +31,9 @@ mongoose
     console.error(err.message);
   });
 
-const conn = mongoose.connection;
+export const conn = mongoose.connection;
 
-conn.once("open", () => {
+ conn.once("open", () => {
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
     bucketName: "cvfiles",
   });

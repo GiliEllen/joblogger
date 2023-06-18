@@ -5,6 +5,8 @@ import CvModel from "./cvfilesModel";
 const crypto = require("crypto");
 const Grid = require("gridfs-stream");
 
+import { gfs } from "../../server";
+
 const mongodb_uri = process.env.MONGO_URI;
 
 export const storage = new GridFsStorage({
@@ -63,20 +65,39 @@ export async function uploader(req, res, next) {
   if (file.size > 20000000) {
     return res.status(400).send({ error: "file may not exceed 20mb" });
   }
-//   console.log("uploaded file: ", file);
-  req.addFile = file
+  //   console.log("uploaded file: ", file);
+  req.addFile = file;
   next();
 }
 
 export async function saveFileToUser(req, res) {
-  const { file,  addFile } = req;
-  const {title, description, userId} = req.body 
+  const { file, addFile } = req;
+  const { title, description, userId } = req.body;
   const cvFileDB = new CvModel({
     userId: userId,
     fileId: addFile.id,
     fileDescription: description,
     fileName: title,
   });
-  await cvFileDB.save()
+  await cvFileDB.save();
   res.send({ file });
 }
+
+export const downloadResume = async (req, res) => {
+  try {
+    const {fileId} = req.params
+    gfs.files.find({_id: fileId}).toArray(function (err, files) {
+      if (err) {
+        res.json(err);
+      }
+      if (files.length > 0) {
+        
+      } else {
+        res.json('File Not Found');
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ error: error.message });
+  }
+};
