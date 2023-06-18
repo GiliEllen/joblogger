@@ -8,7 +8,7 @@ import FileUpload from "./FileUpload";
 const AddJob = () => {
   return (
   <>
-  <FileUpload/>
+  {/* <FileUpload/> */}
   <JobForm type="add" />
   </>
   );

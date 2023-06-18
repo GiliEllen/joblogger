@@ -6,7 +6,7 @@ import { userSelector } from "../features/user/userSlice";
 // import { Form, Row, Col, Button } from 'react-bootstrap';
 // import { API_URL } from '../utils/constants';
 
-const FileUpload = ({ props }: any) => {
+const FileUpload = ({ props, setFileId }: any) => {
   const [file, setFile] = useState<any>(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState<any>(""); // state for storing previewImage
   const [state, setState] = useState<any>({
@@ -65,12 +65,21 @@ const FileUpload = ({ props }: any) => {
           formData.append("userId", userId)
 
           setErrorMsg("");
-          await axios.post(`/api/cv/upload`, formData, {
+          const response = await axios.post(`/api/cv/upload`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
           });
+
+          alert("success!")
+          console.log(response)
+
+          const fileId = response.data.file.id
+          setFileId(fileId)
+
           props.history.push("/list");
+
+
         } else {
           setErrorMsg("Please select a file to add.");
         }

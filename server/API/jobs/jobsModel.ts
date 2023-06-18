@@ -19,7 +19,7 @@ const JobSchema = new mongoose.Schema({
     type:String,
     enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired']
   },
-  cv: Object,
+  cv: String,
   archive: Boolean
 });
 

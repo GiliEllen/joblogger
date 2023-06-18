@@ -3,9 +3,8 @@ import JobModel from "./jobsModel";
 
 export async function addJob(req, res) {
   try {
-    const { formData } = req.body;
+    const { formData, fileId } = req.body;
 
-    console.log(formData);
     const {
       company_name,
       company_description,
@@ -35,7 +34,7 @@ export async function addJob(req, res) {
       date_CV_sent,
       date_interview: null,
       notes,
-      cv: null,
+      cv: fileId,
       archive: false
     });
     await jobDB.save();

@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent, FormEvent, FC, useEffect } from "react";
 import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
+import FileUpload from "./FileUpload";
 
 interface FormData {
   company_name: string;
@@ -37,7 +38,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
     notes: "",
     cv: null,
   });
-  // const [archive, setArchive] = useState<boolean>(false);
+  const [fileId, setFileId] = useState<string>("");
 
   const handleUnarchive = async (jobId: string) => {
     try {
@@ -66,7 +67,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
 
     if (type === "add") {
       try {
-        await axios.post(url, { formData });
+        await axios.post(url, { formData, fileId });
         // Handle successful submission
         console.log("Form submitted successfully");
       } catch (error) {
@@ -107,6 +108,9 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
 
 
   return (
+
+    <>
+    {type === "add" ? <FileUpload setFileId={setFileId}/> : null}
     <form onSubmit={handleSubmit}>
       <label>
         Company Name:
@@ -234,6 +238,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
         </>
       ) : null}
     </form>
+    </>
   );
 };
 

@@ -78,5 +78,5 @@ export async function saveFileToUser(req, res) {
     fileName: title,
   });
   await cvFileDB.save()
-  return res.send({ file });
+  res.send({ file });
 }
