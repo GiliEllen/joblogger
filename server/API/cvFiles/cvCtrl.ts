@@ -4,8 +4,10 @@ import path from "path";
 import CvModel from "./cvfilesModel";
 const crypto = require("crypto");
 const Grid = require("gridfs-stream");
+import fs from "fs"
 
 import { gfs } from "../../server";
+import mongoose from "mongoose";
 
 const mongodb_uri = process.env.MONGO_URI;
 
@@ -78,6 +80,7 @@ export async function saveFileToUser(req, res) {
     fileId: addFile.id,
     fileDescription: description,
     fileName: title,
+    fileInfo: file
   });
   await cvFileDB.save();
   res.send({ file });
@@ -85,17 +88,11 @@ export async function saveFileToUser(req, res) {
 
 export const downloadResume = async (req, res) => {
   try {
-    const {fileId} = req.params
-    gfs.files.find({_id: fileId}).toArray(function (err, files) {
-      if (err) {
-        res.json(err);
-      }
-      if (files.length > 0) {
-        
-      } else {
-        res.json('File Not Found');
-      }
-    })
+    const {filename} = req.params
+    // const _id = new mongoose.Types.ObjectId(fileId)
+    gfs.openDownloadStreamByName(filename).
+    pipe(res);
+
   } catch (error) {
     console.log(error)
     res.status(500).send({ error: error.message });

@@ -7,7 +7,8 @@ const CVFilesSchema = new mongoose.Schema({
   },
   fileId: String,
   fileName: String,
-  fileDescription: String
+  fileDescription: String,
+  fileInfo: mongoose.Schema.Types.Mixed
 });
 
 const CvModel = mongoose.model("cvfiles", CVFilesSchema);

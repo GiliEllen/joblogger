@@ -65,8 +65,8 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
   };
 
   const handleDownloadResume = async () => {
-    const fileId = cv.fileId
-    fetch(`/api/cv/download/${fileId}`)
+    const fileName = cv.fileInfo.filename
+    fetch(`/api/cv/download/${fileName}`)
       .then(res => res.blob())
       .then(data => {
         setFile(data);
