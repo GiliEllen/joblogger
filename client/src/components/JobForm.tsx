@@ -1,8 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent, FC, useEffect } from "react";
 import axios from "axios";
-import { useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
 import FileUpload from "./FileUpload";
+import { getUserByCookie } from "../features/user/userAPI";
 
 interface FormData {
   company_name: string;
@@ -20,11 +21,16 @@ interface FormData {
 interface JobFormProps {
   type: "add" | "edit";
   jobId?: string;
-  archivedJob?: boolean
-  setArchivedJob? : CallableFunction
+  archivedJob?: boolean;
+  setArchivedJob?: CallableFunction;
 }
 
-const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob }) => {
+const JobForm: FC<JobFormProps> = ({
+  type,
+  jobId,
+  archivedJob,
+  setArchivedJob,
+}) => {
   const user = useAppSelector(userSelector);
   const [formData, setFormData] = useState<FormData>({
     company_name: "",
@@ -39,12 +45,17 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
     cv: null,
   });
   const [fileId, setFileId] = useState<string>("");
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getUserByCookie())
+  },[])
 
   const handleUnarchive = async (jobId: string) => {
     try {
       const { data } = await axios.put(`/api/jobs/job/${jobId}`);
       if (setArchivedJob) {
-        setArchivedJob(false)
+        setArchivedJob(false);
       }
     } catch (error) {
       console.error(error);
@@ -63,6 +74,10 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const userId = user?._id;
+    if (!userId) {
+      console.error("no userId")
+      return
+    }
     const url = `/api/jobs/${userId}`;
 
     if (type === "add") {
@@ -92,7 +107,7 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
       console.log(data);
       setFormData(data.jobDB);
       if (setArchivedJob) {
-        setArchivedJob(data.jobDB.archive)
+        setArchivedJob(data.jobDB.archive);
       }
     } catch (error) {
       console.error(error);
@@ -105,139 +120,135 @@ const JobForm: FC<JobFormProps> = ({ type, jobId, archivedJob, setArchivedJob })
     }
   }, []);
 
-
-
   return (
-
     <>
-    {type === "add" ? <FileUpload setFileId={setFileId}/> : null}
-    <form onSubmit={handleSubmit}>
-      <label>
-        Company Name:
-        <input
-          type="text"
-          name="company_name"
-          value={formData.company_name}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+      {type === "add" ? <FileUpload setFileId={setFileId} /> : null}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Company Name:
+          <input
+            type="text"
+            name="company_name"
+            value={formData.company_name}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
+        <label>
+          Company Description:
+          <textarea
+            name="company_description"
+            value={formData.company_description}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Company Description:
-        <textarea
-          name="company_description"
-          value={formData.company_description}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Title:
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Title:
-        <input
-          type="text"
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Title Description:
+          <textarea
+            name="title_description"
+            value={formData.title_description}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Title Description:
-        <textarea
-          name="title_description"
-          value={formData.title_description}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Job Field:
+          <input
+            type="text"
+            name="jobField"
+            value={formData.jobField}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Job Field:
-        <input
-          type="text"
-          name="jobField"
-          value={formData.jobField}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Connection:
+          <input
+            type="text"
+            name="connection"
+            value={formData.connection}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Connection:
-        <input
-          type="text"
-          name="connection"
-          value={formData.connection}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Date CV Sent:
+          <input
+            type="date"
+            name="date_CV_sent"
+            value={formData.date_CV_sent}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Date CV Sent:
-        <input
-          type="date"
-          name="date_CV_sent"
-          value={formData.date_CV_sent}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Date Interview:
+          <input
+            type="date"
+            name="date_interview"
+            value={formData.date_interview}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Date Interview:
-        <input
-          type="date"
-          name="date_interview"
-          value={formData.date_interview}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          Notes:
+          <textarea
+            name="notes"
+            value={formData.notes}
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        Notes:
-        <textarea
-          name="notes"
-          value={formData.notes}
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <label>
+          CV:
+          <input
+            type="file"
+            name="cv"
+            onChange={handleChange}
+            disabled={archivedJob}
+          />
+        </label>
 
-      <label>
-        CV:
-        <input
-          type="file"
-          name="cv"
-          onChange={handleChange}
-          disabled={archivedJob}
-        />
-      </label>
+        <button type="submit" disabled={archivedJob}>
+          Submit
+        </button>
 
-      <button type="submit" disabled={archivedJob}>
-        Submit
-      </button>
-
-      {archivedJob ? (
-        <>
-          <p>
-            This job is archived and cannot be changed. would you like to an
-            archive it?
-          </p>
-          <button
-            onClick={() => {
-              if (jobId) handleUnarchive(jobId);
-            }}
-          >
-            Unarchive
-          </button>
-        </>
-      ) : null}
-    </form>
+        {archivedJob ? (
+          <>
+            <p>
+              This job is archived and cannot be changed. would you like to an
+              archive it?
+            </p>
+            <button
+              onClick={() => {
+                if (jobId) handleUnarchive(jobId);
+              }}
+            >
+              Unarchive
+            </button>
+          </>
+        ) : null}
+      </form>
     </>
   );
 };

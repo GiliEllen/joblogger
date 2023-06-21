@@ -6,6 +6,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
+import MenuIcon from '@mui/icons-material/Menu';
 
 const DrawerMenue = () => {
   const [open, setOpen] = useState(false);
@@ -47,7 +48,8 @@ const DrawerMenue = () => {
 
       <Grid item>
         <Button onClick={() => setOpen(!open)}>
-          {open ? "Hide" : "Show"} Drawer
+          {/* {open ? "Hide" : "Show"} Drawer */}
+          <MenuIcon sx={{fontSize: "50px"}}/>
         </Button>
       </Grid>
     </Grid>

@@ -1,16 +1,18 @@
 import React, { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsisVertical,
+  faGaugeSimpleMed,
+} from "@fortawesome/free-solid-svg-icons";
 import JobForm from "./JobForm";
 import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
-import { Paper, Typography, Link } from '@mui/material';
-
+import { Paper, Typography, Link, Button, Container } from "@mui/material";
 
 interface JobItemProps {
   item: any;
-  cv: any
+  cv: any;
 }
 
 const JobItem: FC<JobItemProps> = ({ item, cv }) => {
@@ -29,6 +31,12 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
   const [visibleConsent, setVisibleConsent] = useState<boolean>(false);
   const [deleteConsent, setDeleteConsent] = useState<string>("");
   const [archivedJob, setArchivedJob] = useState<boolean>(archive);
+
+  const [cardVisibleWrap, setCardVisibleWrap] = useState({
+    company_description: true,
+    title_description: true,
+    notes: true,
+  });
 
   const user = useAppSelector(userSelector);
 
@@ -63,21 +71,66 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
       console.error(error);
     }
   };
+
+  const handleClickLength = (ev: any) => {
+    const params = ev.target.id;
+    if (params === "company") {
+      setCardVisibleWrap({
+        ...cardVisibleWrap,
+        company_description: !cardVisibleWrap.company_description,
+      });
+    } else if (params === "notes") {
+      setCardVisibleWrap({
+        ...cardVisibleWrap,
+        notes: !cardVisibleWrap.notes,
+      });
+    } else if (params === "title") {
+      setCardVisibleWrap({
+        ...cardVisibleWrap,
+        title_description: !cardVisibleWrap.title_description,
+      });
+    }
+  };
+
   return (
-
-    <Paper elevation={3} sx={{p: 3, my: 4}}>
+    <Paper elevation={3} sx={{ p: 3, my: 4 }}>
       <Typography variant="h4">{title}</Typography>
-      <Typography variant="h5">at {company_name}</Typography>
-      <Typography>{company_description}</Typography>
-      <Typography variant="h5">My description of th job:</Typography>
-      <Typography>{title_description}</Typography>
+      <Container>
+        <Typography variant="h5">at {company_name}</Typography>
+        <Container sx={styles.sameRow}>
+          <Typography
+            noWrap={cardVisibleWrap.company_description}
+            onClick={handleClickLength}
+          >
+            {company_description}
+          </Typography>
+          {company_description.length > 20 ? (
+            <Button onClick={handleClickLength} id={"company"}>
+              more...
+            </Button>
+          ) : null}
+        </Container>
+      </Container>
+      <Typography variant="h5">My description of the job:</Typography>
+      <Typography noWrap={cardVisibleWrap.title_description}>
+        {title_description}
+      </Typography>
+      {title_description.length > 20 ? (
+        <Button onClick={handleClickLength} id={"title"}>
+          more...
+        </Button>
+      ) : null}
+
       <Typography variant="h5">Notes:</Typography>
-      <Typography>{notes}</Typography>
+      <Typography noWrap={cardVisibleWrap.notes}>{notes}</Typography>
+
       <Link component="button">Click for more information</Link>
+      {notes.length > 20 ? (
+        <Button onClick={handleClickLength} id={"notes"}>
+          more...
+        </Button>
+      ) : null}
     </Paper>
-
-
-
 
     // <div>
     //   <h1>{title}</h1>
@@ -135,3 +188,10 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
 };
 
 export default JobItem;
+
+const styles = {
+  sameRow: {
+    display: "flex",
+    alignItems: "center",
+  },
+};

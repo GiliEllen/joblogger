@@ -20,7 +20,7 @@ const Home = () => {
     <DrawerMenue/>
       <Container sx={{ height: "100vh" }}>
         <Typography
-          variant="h1"
+          variant="h2"
           sx={{ my: 4, textAlign: "center", color: "primary.main" }}
         >
           JobLogger
