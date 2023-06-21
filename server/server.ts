@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 // import methodOverride from "method-"
+const Grid = require("gridfs-stream");
 
 
 const app = express();
@@ -17,7 +18,7 @@ app.use(cookieParser());
 
 // const conn = mongoose.createConnection(mongodb_uri);
 
-let gfs;
+// export let gfs;
 
 mongoose.set("strictQuery", true);
 
@@ -33,11 +34,22 @@ mongoose
 
 const conn = mongoose.connection;
 
-conn.once("open", () => {
-  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: "cvfiles",
-  });
+// conn.once("open", () => {
+//   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+//     bucketName: "cvfiles",
+//   });
+// });
+export let gridfsBucket; 
+
+export let gfs = conn.once('open', () => {
+  gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
+  bucketName: 'uploads'
 });
+
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+  return gfs;
+})
 
 
 import cvfilesRoutes from "./API/cvFiles/cvFilesRoutes";
