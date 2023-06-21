@@ -6,11 +6,12 @@ import { userSelector } from "../features/user/userSlice";
 import { Job } from "../features/jobs/jobModel";
 import { getAllJobs } from "../features/jobs/jobApi";
 import { archiveJob, jobArraySelector } from "../features/jobs/jobSlice";
+import { Container, Paper } from '@mui/material';
 
 const JobContainer = () => {
   const [jobs, setJobs] = useState([]);
 
-  const jobsList = useAppSelector(jobArraySelector)
+  const jobsList = useAppSelector(jobArraySelector);
   const user = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
 
@@ -28,29 +29,33 @@ const JobContainer = () => {
     }
   };
 
-
-
-
-
   useEffect(() => {
     handleGetAllUserJobs();
   }, [user]);
 
   return (
-    <div>
-      <h1>Jobs</h1>
-      <div>
-        {jobsList && jobsList.map((job: any) => {
-          return (
-            <JobItem
-              key={job.job._id}
-              item={job.job}
-              cv={job.cvFile[0]}
-            />
-          );
-        })}
-      </div>
-    </div>
+    <Container>
+
+      {jobsList &&
+          jobsList.map((job: any) => {
+            return (
+              <JobItem key={job.job._id} item={job.job} cv={job.cvFile[0]} />
+            );
+          })}
+
+    </Container>
+
+    // <div>
+    //   <h1>Jobs</h1>
+    //   <div>
+    //     {jobsList &&
+    //       jobsList.map((job: any) => {
+    //         return (
+    //           <JobItem key={job.job._id} item={job.job} cv={job.cvFile[0]} />
+    //         );
+    //       })}
+    //   </div>
+    // </div>
   );
 };
 
