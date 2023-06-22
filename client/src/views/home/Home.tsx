@@ -7,6 +7,7 @@ import { userSelector } from "../../features/user/userSlice";
 import { Container, Typography } from "@mui/material";
 import DrawerMenue from "../../components/DrawerMenue";
 
+
 const Home = () => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(userSelector);
@@ -26,6 +27,7 @@ const Home = () => {
           JobLogger
         </Typography>
         <Typography variant="h2">Current Jobs</Typography>
+
         <JobContainer/>
       </Container>
       {/* {user?.firstName}

@@ -6,14 +6,27 @@ import { userSelector } from "../features/user/userSlice";
 import { Job } from "../features/jobs/jobModel";
 import { getAllJobs } from "../features/jobs/jobApi";
 import { archiveJob, jobArraySelector } from "../features/jobs/jobSlice";
-import { Container, Paper } from '@mui/material';
+import { Container, Paper } from "@mui/material";
+import { GridFilterModel, DataGrid } from "@mui/x-data-grid";
+import Filter from "./Filter";
 
 const JobContainer = () => {
-  const [jobs, setJobs] = useState([]);
+  // const [jobs, setJobs] = useState([]);
+  const [filterList, setFilterList] = useState<Job[]>([]);
 
   const jobsList = useAppSelector(jobArraySelector);
   const user = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
+
+  // const handleSetFilterList = (jobs:Job[]) => {
+  //   const list = jobs.map(() => {
+
+  //   })
+  // }
+
+  const filterModel: GridFilterModel = {
+    items: [{ id: 1, field: "title", operator: "is", value: "fullstack" }],
+  };
 
   const handleGetAllUserJobs = async () => {
     try {
@@ -21,7 +34,7 @@ const JobContainer = () => {
         const userId = user?._id;
         const { data } = await axios.get(`/api/jobs/user/${userId}`);
         console.log(data);
-        setJobs(data.jobsDB.jobs);
+        // setJobs(data.jobsDB.jobs);
         dispatch(getAllJobs({ userId }));
       }
     } catch (error) {
@@ -33,16 +46,19 @@ const JobContainer = () => {
     handleGetAllUserJobs();
   }, [user]);
 
+  useEffect(() => {
+    setFilterList(jobsList)
+  }, [jobsList]);
+
   return (
     <Container>
-
-      {jobsList &&
-          jobsList.map((job: any) => {
-            return (
-              <JobItem key={job.job._id} item={job.job} cv={job.cvFile[0]} />
-            );
-          })}
-
+      <Filter filterList={filterList} setFilterList={setFilterList}/>
+      {filterList &&
+        filterList.map((job: any) => {
+          return (
+            <JobItem key={job.job._id} item={job.job} cv={job.cvFile[0]} />
+          );
+        })}
     </Container>
 
     // <div>
