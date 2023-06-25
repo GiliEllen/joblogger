@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Job } from "../features/jobs/jobModel";
 import {
   Paper,
@@ -15,9 +15,10 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 interface FilterProps {
   filterList: Job[];
   setFilterList: CallableFunction;
+  jobsList: any[];
 }
 
-const Filter: FC<FilterProps> = ({ filterList, setFilterList }) => {
+const Filter: FC<FilterProps> = ({ filterList, setFilterList, jobsList }) => {
   const [filter, setFilter] = useState();
   const [open, setOpen] = useState(false);
   const [searchString, setSearchString] = useState("");
@@ -36,19 +37,39 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList }) => {
     setOpen(true);
   };
 
-  const handleSubmit = (ev: any) => {
-    ev.preventDefault();
-    console.log("submitted");
+  const handleSubmit = () => {
+    console.log(searchString);
+    const regExp = new RegExp(searchString, "g");
 
-    setSearchString(ev.target.value);
-
-    const regExp = new RegExp(searchString);
-
-    const newFilterList = filterList.filter((item) => {
-      if (regExp.test(item.title)) return item;
-    });
-    console.log(newFilterList);
+    if (searchString === "") {
+      setFilterList(jobsList);
+    } else if (filter === "title") {
+      const newFilterList = jobsList.filter((item) => {
+        //@ts-ignore
+        if (regExp.test(item.job.title)) {
+          return item;
+        }
+      });
+      setFilterList(newFilterList);
+    } else if (filter === "company") {
+      const newFilterList = jobsList.filter((item) => {
+        //@ts-ignore
+        if (regExp.test(item.job.company_name)) {
+          return item;
+        }
+      });
+      setFilterList(newFilterList);
+    }
   };
+
+  const resetSearch = () => {
+    setSearchString("");
+    setFilterList(jobsList);
+  };
+
+  useEffect(() => {
+    handleSubmit()
+  },[searchString])
 
   return (
     <Paper>
@@ -83,9 +104,10 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList }) => {
             label="Search"
             variant="outlined"
             value={searchString}
-            onInput={handleSubmit}
+            onInput={(ev: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchString(ev.target.value);
+            }}
           />
-          <Button type="submit">Filter</Button>
         </FormControl>
       </Box>
     </Paper>
