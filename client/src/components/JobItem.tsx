@@ -107,24 +107,30 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
           />
         </Container>
       </Container>
-      <Typography variant="h5">My description of the job:</Typography>
 
+      <Container>
+        <Typography variant="h5">My description of the job:</Typography>
+        <Container sx={styles.sameRow}>
+          <CardLinesButtons
+            wrapDependency={cardVisibleWrap.title_description}
+            text={title_description}
+            handleClickLength={handleClickLength}
+            id="title"
+          />
+        </Container>
+      </Container>
+      <Container>
+      <Typography variant="h5">Notes:</Typography>
       <CardLinesButtons
-        wrapDependency={cardVisibleWrap.title_description}
-        text={title_description}
+        wrapDependency={cardVisibleWrap.notes}
+        text={notes}
         handleClickLength={handleClickLength}
-        id="title"
+        id={"notes"}
       />
 
-      <Typography variant="h5">Notes:</Typography>
-      <Typography noWrap={cardVisibleWrap.notes}>{notes}</Typography>
-
-      <Link component="button">Click for more information</Link>
-      {notes.length > 20 ? (
-        <Button onClick={handleClickLength} id={"notes"}>
-          more...
-        </Button>
-      ) : null}
+      </Container>
+      
+      <Button sx={{marginTop: '20px'}} variant="contained" component={"a"} href={`/job-info/${_id}`}>More information</Button>
     </Paper>
 
     // <div>

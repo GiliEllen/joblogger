@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Container } from "@mui/material";
 
 interface CardLinesButtonsProps {
   wrapDependency: boolean;
@@ -15,8 +15,8 @@ const CardLinesButtons: FC<CardLinesButtonsProps> = ({
   id,
 }) => {
   return (
-    <>
-      <Typography noWrap={wrapDependency}>
+    <Container sx={{ display: "flex", alignItems: "center" }}>
+      <Typography noWrap={wrapDependency} >
         {text}{" "}
         {text.length > 20 ? (
           <Button onClick={handleClickLength} id={id}>
@@ -29,7 +29,7 @@ const CardLinesButtons: FC<CardLinesButtonsProps> = ({
           more...
         </Button>
       ) : null}
-    </>
+    </Container>
   );
 };
 
