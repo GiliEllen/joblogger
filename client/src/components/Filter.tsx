@@ -9,6 +9,8 @@ import {
   MenuItem,
   TextField,
   Button,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
@@ -22,6 +24,7 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList, jobsList }) => {
   const [filter, setFilter] = useState();
   const [open, setOpen] = useState(false);
   const [searchString, setSearchString] = useState("");
+  const [hideArchive, setHideArchive] = useState<boolean>(false);
 
   const filterByList = ["title", "company"];
 
@@ -38,13 +41,13 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList, jobsList }) => {
   };
 
   const handleSubmit = () => {
-    console.log(searchString);
     const regExp = new RegExp(searchString, "g");
+    console.log(jobsList);
 
     if (searchString === "") {
       setFilterList(jobsList);
     } else if (filter === "title") {
-      const newFilterList = jobsList.filter((item) => {
+      let newFilterList = jobsList.filter((item) => {
         //@ts-ignore
         if (regExp.test(item.job.title)) {
           return item;
@@ -62,14 +65,32 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList, jobsList }) => {
     }
   };
 
-  const resetSearch = () => {
-    setSearchString("");
-    setFilterList(jobsList);
+  const toggleHideArchive = () => {
+    if (hideArchive) {
+      //@ts-ignore
+      const list = filterList.filter((item) => item.job.archive);
+      setFilterList(list);
+    } else if (!hideArchive) {
+      console.log(jobsList);
+
+      setFilterList(jobsList);
+    }
   };
 
   useEffect(() => {
-    handleSubmit()
-  },[searchString])
+    console.log(hideArchive);
+    if (hideArchive) {
+      //@ts-ignore
+      const list = filterList.filter((item) => item.job.archive === false);
+      setFilterList(list);
+    } else if (!hideArchive) {
+      setFilterList(jobsList);
+    }
+  }, [hideArchive]);
+
+  useEffect(() => {
+    handleSubmit();
+  }, [searchString]);
 
   return (
     <Paper>
@@ -106,6 +127,13 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList, jobsList }) => {
             value={searchString}
             onInput={(ev: React.ChangeEvent<HTMLInputElement>) => {
               setSearchString(ev.target.value);
+            }}
+          />
+          <FormControlLabel
+            control={<Checkbox/>}
+            label="Hide Archived"
+            onClick={(ev: any) => {
+              setHideArchive(ev.target.checked);
             }}
           />
         </FormControl>

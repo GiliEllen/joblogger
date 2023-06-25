@@ -96,7 +96,7 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
 
   return (
     <Paper elevation={3} sx={{ p: 3, my: 4 }}>
-      <Typography variant="h4">{title}</Typography>
+      <Typography variant="h4">{title} {JSON.stringify(archive)}</Typography>
       <Container>
         <Typography variant="h5">at {company_name}</Typography>
         <Container sx={styles.sameRow}>
