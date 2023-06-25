@@ -9,6 +9,7 @@ import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
 import { Paper, Typography, Link, Button, Container } from "@mui/material";
+import CardLinesButtons from "./CardLinesButtons";
 
 interface JobItemProps {
   item: any;
@@ -98,28 +99,22 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
       <Container>
         <Typography variant="h5">at {company_name}</Typography>
         <Container sx={styles.sameRow}>
-          <Typography
-            noWrap={cardVisibleWrap.company_description}
-            onClick={handleClickLength}
-          >
-            {company_description}
-          </Typography>
-          {company_description.length > 20 ? (
-            <Button onClick={handleClickLength} id={"company"}>
-              more...
-            </Button>
-          ) : null}
+          <CardLinesButtons
+            wrapDependency={cardVisibleWrap.company_description}
+            text={company_description}
+            handleClickLength={handleClickLength}
+            id="company"
+          />
         </Container>
       </Container>
       <Typography variant="h5">My description of the job:</Typography>
-      <Typography noWrap={cardVisibleWrap.title_description}>
-        {title_description}
-      </Typography>
-      {title_description.length > 20 ? (
-        <Button onClick={handleClickLength} id={"title"}>
-          more...
-        </Button>
-      ) : null}
+
+      <CardLinesButtons
+        wrapDependency={cardVisibleWrap.title_description}
+        text={title_description}
+        handleClickLength={handleClickLength}
+        id="title"
+      />
 
       <Typography variant="h5">Notes:</Typography>
       <Typography noWrap={cardVisibleWrap.notes}>{notes}</Typography>

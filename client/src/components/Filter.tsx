@@ -23,7 +23,7 @@ const Filter: FC<FilterProps> = ({ filterList, setFilterList, jobsList }) => {
   const [open, setOpen] = useState(false);
   const [searchString, setSearchString] = useState("");
 
-  const filterByList = ["title", "company", "All"];
+  const filterByList = ["title", "company"];
 
   const handleChange = (ev: any) => {
     setFilter(ev.target.value);
