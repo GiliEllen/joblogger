@@ -8,8 +8,9 @@ import JobForm from "./JobForm";
 import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
-import { Paper, Typography, Link, Button, Container } from "@mui/material";
+import { Paper, Typography, Button, Container } from "@mui/material";
 import CardLinesButtons from "./CardLinesButtons";
+import { Link } from "react-router-dom";
 
 interface JobItemProps {
   item: any;
@@ -120,17 +121,19 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
         </Container>
       </Container>
       <Container>
-      <Typography variant="h5">Notes:</Typography>
-      <CardLinesButtons
-        wrapDependency={cardVisibleWrap.notes}
-        text={notes}
-        handleClickLength={handleClickLength}
-        id={"notes"}
-      />
-
+        <Typography variant="h5">Notes:</Typography>
+        <CardLinesButtons
+          wrapDependency={cardVisibleWrap.notes}
+          text={notes}
+          handleClickLength={handleClickLength}
+          id={"notes"}
+        />
       </Container>
-      
-      <Button sx={{marginTop: '20px'}} variant="contained" component={"a"} href={`/job-info/${_id}`}>More information</Button>
+      <Link to={`/job-info/${_id}`}>
+        <Button sx={{ marginTop: "20px" }} variant="contained">
+          More information
+        </Button>
+      </Link>
     </Paper>
 
     // <div>

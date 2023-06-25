@@ -6,6 +6,7 @@ import LoginForm from "./views/Login";
 import Home from "./views/home/Home";
 import SignInSide from "./views/LoginToTheSide";
 import AddJob from "./components/AddJob";
+import JobInformation from "./views/home/JobInformation";
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/home" element={<Home />} />
         <Route path="/add-job" element={<AddJob />} />
-        <Route path="/job-info/:jobId" element={<div></div>} />
+        <Route path="/job-info/:jobId" element={<JobInformation/>} />
 
       </Routes>
     </BrowserRouter>
