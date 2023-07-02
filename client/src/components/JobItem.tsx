@@ -11,7 +11,7 @@ import { userSelector } from "../features/user/userSlice";
 import { Paper, Typography, Button, Container, Grid } from "@mui/material";
 import CardLinesButtons from "./CardLinesButtons";
 import { Link } from "react-router-dom";
-import ProgressBar from "./LinearProgressStatus";
+import ProgressBar, { Status } from "./LinearProgressStatus";
 
 interface JobItemProps {
   item: any;
@@ -29,11 +29,24 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
     notes,
     _id,
     archive,
+    status,
   } = item;
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
   const [visibleConsent, setVisibleConsent] = useState<boolean>(false);
   const [deleteConsent, setDeleteConsent] = useState<string>("");
   const [archivedJob, setArchivedJob] = useState<boolean>(archive);
+  const [statusArray, setStatusArray] = useState<Status[]>([
+    Status.APPLIED,
+    Status.CV,
+    Status.DENIED,
+    Status.HIRED,
+    Status.IP,
+    Status.IV,
+    Status.TEST,
+  ]);
+  const [statusDisplay, setStatusDisplay] = useState<Status>(status);
+  const [visibleStatusSelect, setVisibleStatusSelect] =
+    useState<boolean>(false);
 
   const [cardVisibleWrap, setCardVisibleWrap] = useState({
     company_description: true,
@@ -95,55 +108,97 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
     }
   };
 
+  const handleStatusUpdate = async (ev: any) => {
+    try {
+      const newStatus = ev.target.value;
+      if (newStatus === status) return;
+      setStatusDisplay(newStatus);
+      const jobId = _id;
+      const { data } = await axios.patch(`/api/jobs/job/${jobId}`, {
+        status: newStatus,
+      });
+      if (data.ok) {
+        setVisibleStatusSelect(false)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Grid item xs={6}>
-    <Paper elevation={3} sx={{ p: 3, my: 4, height: "90%"}}>
-      <Typography variant="h4">
-        {title} {JSON.stringify(archive)}
-      </Typography>
-      <Container>
-        <Typography variant="h5">at {company_name}</Typography>
-        <Container sx={styles.sameRow}>
+      <Paper elevation={3} sx={{ p: 3, my: 4, height: "90%" }}>
+        <Typography variant="h4">
+          {title} {JSON.stringify(archive)}
+        </Typography>
+        <Container>
+          <Typography variant="h5">at {company_name}</Typography>
+          <Container sx={styles.sameRow}>
+            <CardLinesButtons
+              wrapDependency={cardVisibleWrap.company_description}
+              text={company_description}
+              handleClickLength={handleClickLength}
+              id="company"
+            />
+          </Container>
+        </Container>
+
+        <Container>
+          <Typography variant="h5">My description of the job:</Typography>
+          <Container sx={styles.sameRow}>
+            <CardLinesButtons
+              wrapDependency={cardVisibleWrap.title_description}
+              text={title_description}
+              handleClickLength={handleClickLength}
+              id="title"
+            />
+          </Container>
+        </Container>
+        <Container>
+          <Typography variant="h5">Status:</Typography>
+          <Button
+            variant="contained"
+            onClick={() => setVisibleStatusSelect(!visibleStatusSelect)}
+          >
+            {statusDisplay}
+          </Button>
+          {!visibleStatusSelect ? (
+            <ProgressBar status={statusDisplay} />
+          ) : (
+            <Grid container spacing={2} my={2}>
+              {statusArray.map((statusElem) => {
+                return (
+                  <Grid item>
+                    <Button
+                      value={statusElem}
+                      onClick={handleStatusUpdate}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      {statusElem}
+                    </Button>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
+        </Container>
+        <Container>
+          <Typography variant="h5">Notes:</Typography>
           <CardLinesButtons
-            wrapDependency={cardVisibleWrap.company_description}
-            text={company_description}
+            wrapDependency={cardVisibleWrap.notes}
+            text={notes}
             handleClickLength={handleClickLength}
-            id="company"
+            id={"notes"}
           />
         </Container>
-      </Container>
 
-      <Container>
-        <Typography variant="h5">My description of the job:</Typography>
-        <Container sx={styles.sameRow}>
-          <CardLinesButtons
-            wrapDependency={cardVisibleWrap.title_description}
-            text={title_description}
-            handleClickLength={handleClickLength}
-            id="title"
-          />
-        </Container>
-      </Container>
-      <Container>
-        <Typography variant="h5">Status:</Typography>
-        <ProgressBar />
-      </Container>
-      <Container>
-        <Typography variant="h5">Notes:</Typography>
-        <CardLinesButtons
-          wrapDependency={cardVisibleWrap.notes}
-          text={notes}
-          handleClickLength={handleClickLength}
-          id={"notes"}
-        />
-      </Container>
-
-      <Link to={`/job-info/${_id}`}>
-        <Button sx={{ marginTop: "20px" }} variant="contained">
-          More information
-        </Button>
-      </Link>
-    </Paper>
+        <Link to={`/job-info/${_id}`}>
+          <Button sx={{ marginTop: "20px" }} variant="contained">
+            More information
+          </Button>
+        </Link>
+      </Paper>
     </Grid>
 
     // <div>

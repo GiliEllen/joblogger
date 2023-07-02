@@ -37,6 +37,7 @@ export async function addJob(req, res) {
       notes,
       cv: fileId,
       archive: false,
+      status: "Applied",
     });
     await jobDB.save();
 
@@ -125,5 +126,26 @@ export async function deleteJobById(req, res) {
     res.send({ result });
   } catch (error) {
     res.status(500).send({ error: error.message, archive: false });
+  }
+}
+
+export async function updateStatus(req, res) {
+  try {
+    const { jobId } = req.params;
+    if (!jobId)
+      throw new Error("no jobId found on params in updateStatus in JobsCtrl");
+    const { status } = req.body;
+    if (!status)
+      throw new Error("no status found on body in updateStatus in JobsCtrl");
+    const jobDB = await JobModel.findByIdAndUpdate(
+      jobId,
+      { status: status },
+      {
+        new: true,
+      }
+    );
+    res.send({ jobDB, ok: true });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
   }
 }
