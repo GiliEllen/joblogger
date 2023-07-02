@@ -129,7 +129,7 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
     <Grid item xs={6}>
       <Paper elevation={3} sx={{ p: 3, my: 4, height: "90%" }}>
         <Typography variant="h4">
-          {title} {JSON.stringify(archive)}
+          {title}
         </Typography>
         <Container>
           <Typography variant="h5">at {company_name}</Typography>

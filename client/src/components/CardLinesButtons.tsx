@@ -18,13 +18,13 @@ const CardLinesButtons: FC<CardLinesButtonsProps> = ({
     <Container sx={{ display: "flex", alignItems: "center" }}>
       <Typography noWrap={wrapDependency} >
         {text}{" "}
-        {text.length > 20 ? (
+        {text.length > 30 ? (
           <Button onClick={handleClickLength} id={id}>
             LESS...
           </Button>
         ) : null}
       </Typography>
-      {text.length > 20 && wrapDependency ? (
+      {text.length > 30 && wrapDependency ? (
         <Button onClick={handleClickLength} id={id}>
           more...
         </Button>
