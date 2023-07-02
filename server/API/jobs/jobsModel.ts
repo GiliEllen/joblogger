@@ -17,7 +17,7 @@ const JobSchema = new mongoose.Schema({
   notes: String,
   status: {
     type:String,
-    enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired']
+    enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired', 'Test']
   },
   cv: String,
   archive: Boolean,

@@ -6,7 +6,7 @@ import { userSelector } from "../features/user/userSlice";
 import { Job } from "../features/jobs/jobModel";
 import { getAllJobs } from "../features/jobs/jobApi";
 import { archiveJob, jobArraySelector } from "../features/jobs/jobSlice";
-import { Container, Paper, Typography } from "@mui/material";
+import { Container, Paper, Typography, Grid } from "@mui/material";
 import { GridFilterModel, DataGrid } from "@mui/x-data-grid";
 import Filter from "./Filter";
 
@@ -57,17 +57,19 @@ const JobContainer = () => {
         setFilterList={setFilterList}
         jobsList={jobsList}
       />
-      {filterList.length > 0 &&
-        filterList.map((job: any) => {
-          return (
-            <JobItem key={job.job._id} item={job.job} cv={job.cvFile[0]} />
-          );
-        })}
-      {filterList.length == 0 ? (
-        <Paper>
-          <Typography variant="h4">No jobs found</Typography>
-        </Paper>
-      ) : null}
+      <Grid container spacing={2} gridAutoRows={'1fr'}>
+        {filterList.length > 0 &&
+          filterList.map((job: any) => {
+            return (
+              <JobItem key={job.job._id} item={job.job} cv={job.cvFile[0]} />
+            );
+          })}
+        {filterList.length == 0 ? (
+          <Paper>
+            <Typography variant="h4">No jobs found</Typography>
+          </Paper>
+        ) : null}
+      </Grid>
     </Container>
 
     // <div>

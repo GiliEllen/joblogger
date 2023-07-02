@@ -8,9 +8,10 @@ import JobForm from "./JobForm";
 import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
-import { Paper, Typography, Button, Container } from "@mui/material";
+import { Paper, Typography, Button, Container, Grid } from "@mui/material";
 import CardLinesButtons from "./CardLinesButtons";
 import { Link } from "react-router-dom";
+import ProgressBar from "./LinearProgressStatus";
 
 interface JobItemProps {
   item: any;
@@ -95,8 +96,11 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 3, my: 4 }}>
-      <Typography variant="h4">{title} {JSON.stringify(archive)}</Typography>
+    <Grid item xs={6}>
+    <Paper elevation={3} sx={{ p: 3, my: 4, height: "90%"}}>
+      <Typography variant="h4">
+        {title} {JSON.stringify(archive)}
+      </Typography>
       <Container>
         <Typography variant="h5">at {company_name}</Typography>
         <Container sx={styles.sameRow}>
@@ -121,6 +125,10 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
         </Container>
       </Container>
       <Container>
+        <Typography variant="h5">Status:</Typography>
+        <ProgressBar />
+      </Container>
+      <Container>
         <Typography variant="h5">Notes:</Typography>
         <CardLinesButtons
           wrapDependency={cardVisibleWrap.notes}
@@ -129,12 +137,14 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
           id={"notes"}
         />
       </Container>
+
       <Link to={`/job-info/${_id}`}>
         <Button sx={{ marginTop: "20px" }} variant="contained">
           More information
         </Button>
       </Link>
     </Paper>
+    </Grid>
 
     // <div>
     //   <h1>{title}</h1>
