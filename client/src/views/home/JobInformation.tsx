@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Paper, Typography, Box } from "@mui/material";
+import {
+  Button,
+  Container,
+  Paper,
+  Typography,
+  Box,
+  TextField,
+  Stack,
+} from "@mui/material";
 import DrawerMenue from "../../components/DrawerMenue";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -73,7 +81,7 @@ const JobInformation = () => {
       <DrawerMenue />
 
       <Container>
-        <Paper>
+        <Paper sx={{padding: 5}} elevation={3}>
           <Container>
             <Typography variant="h3">{job.title}</Typography>
             <Typography variant="h5">at {job.company_name}</Typography>
@@ -86,14 +94,16 @@ const JobInformation = () => {
             <Typography>{job.date_CV_sent}</Typography>
             <Typography variant="h5">notes</Typography>
             <Typography>{job.notes}</Typography>
-            <Typography variant="h5">Cv file</Typography>
+            {/* <Typography variant="h5">Cv file</Typography> */}
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "60%",
-              }}
+            <Stack
+            direction={'row'}
+            spacing={3}
+              // sx={{
+              //   display: "flex",
+              //   justifyContent: "space-between",
+              //   width: "60%",
+              // }}
             >
               <Button
                 startIcon={<EditIcon />}
@@ -105,7 +115,7 @@ const JobInformation = () => {
               <Button
                 startIcon={<DeleteIcon />}
                 variant="contained"
-                color="secondary"
+                color="error"
                 onClick={() => handleGetConsent()}
               >
                 Delete
@@ -118,10 +128,67 @@ const JobInformation = () => {
               >
                 Archive
               </Button>
-            </Box>
+            </Stack>
+            {visibleConsent ? (
+              <Paper
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  margin: "auto",
+                  width: "50vw",
+                  height: "20vh",
+                  backgroundColor: "#e8e8e8",
+                  borderColor: "#969696",
+                  borderStyle: "solid",
+                  borderWidth: "1px",
+                  padding: 5,
+                }}
+              >
+                <Typography my={2} variant="h5">
+                  Are you sure you want to delete this job?
+                </Typography>
+                <Typography my={2} variant="h6">
+                  This action is not permennt
+                </Typography>
+                <Typography variant="h6">
+                  If you are sure, please write "Yes" below, then click the
+                  button
+                </Typography>
+                <TextField
+                  type="text"
+                  value={deleteConsent}
+                  onInput={(ev: any) => setDeleteConsent(ev.target.value)}
+                />
+                <Stack spacing={2} direction={'row'} sx={{justifyContent: 'center', mt: 1}}>
+                  <Button
+                  variant="contained"
+                  color="error"
+                    onClick={() => {
+                      handleDeleteJob(job._id);
+                    }}
+                    disabled={deleteConsent === "Yes" ? false : true}
+                  >
+                    DELETE
+                  </Button>
+                  <Button
+                  variant="contained"
+                    onClick={() => {
+                      setVisibleConsent(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Stack>
+              </Paper>
+            ) : null}
 
             {visibleEdit ? (
-              <Container sx={{my: 5}}>
+              <Container sx={{ my: 5 }}>
                 <JobForm
                   type="edit"
                   jobId={job._id}
@@ -129,29 +196,6 @@ const JobInformation = () => {
                   setArchivedJob={setArchivedJob}
                 />
               </Container>
-            ) : null}
-            {visibleConsent ? (
-              <div>
-                <h5>Are you sure you want to delete this job?</h5>
-                <p>This action is not permennt</p>
-                <p>
-                  If you are sure, please write "Yes" below, then click the
-                  button
-                </p>
-                <input
-                  type="text"
-                  value={deleteConsent}
-                  onInput={(ev: any) => setDeleteConsent(ev.target.value)}
-                />
-                <button
-                  onClick={() => {
-                    handleDeleteJob(job._id);
-                  }}
-                  disabled={deleteConsent === "Yes" ? false : true}
-                >
-                  DELETE
-                </button>
-              </div>
             ) : null}
           </Container>
         </Paper>

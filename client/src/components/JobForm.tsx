@@ -178,6 +178,24 @@ const JobForm: FC<JobFormProps> = ({
   return (
     <Stack spacing={3}>
       {/* {type === "add" ? <FileUpload setFileId={setFileId} /> : null} */}
+      <Box>
+      {archivedJob ? (
+          <>
+            <p>
+              This job is archived and cannot be changed. would you like to an
+              archive it?
+            </p>
+            <Button variant="contained"
+              onClick={() => {
+                if (jobId) handleUnarchive(jobId);
+              }}
+            >
+              Unarchive
+            </Button>
+          </>
+        ) : null}
+      </Box>
+      
       <form onSubmit={handleSubmit}>
         <Stack spacing={3}>
           <Box sx={{ width }}>
@@ -296,21 +314,7 @@ const JobForm: FC<JobFormProps> = ({
           </Box>
         </Stack>
 
-        {archivedJob ? (
-          <>
-            <p>
-              This job is archived and cannot be changed. would you like to an
-              archive it?
-            </p>
-            <button
-              onClick={() => {
-                if (jobId) handleUnarchive(jobId);
-              }}
-            >
-              Unarchive
-            </button>
-          </>
-        ) : null}
+        
       </form>
     </Stack>
   );
