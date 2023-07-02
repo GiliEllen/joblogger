@@ -65,8 +65,9 @@ const JobContainer = () => {
             );
           })}
         {filterList.length == 0 ? (
-          <Paper>
-            <Typography variant="h4">No jobs found</Typography>
+
+          <Paper elevation={3} sx={{ p: 3, my: 4, height: "90%" , width: '90vw'}}>
+            <Typography  variant="h4">No jobs found</Typography>
           </Paper>
         ) : null}
       </Grid>
