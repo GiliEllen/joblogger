@@ -4,6 +4,19 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
 import FileUpload from "./FileUpload";
 import { getUserByCookie } from "../features/user/userAPI";
+import {
+  Box,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  TextField,
+  FormControlLabel,
+  Stack,
+  Button,
+} from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { useNavigate } from "react-router-dom";
 
 interface FormData {
   company_name: string;
@@ -12,8 +25,8 @@ interface FormData {
   title_description: string;
   jobField: string;
   connection: string;
-  date_CV_sent: string;
-  date_interview: string;
+  date_CV_sent: string | null;
+  date_interview: string | null;
   notes: string;
   cv: File | null;
 }
@@ -39,17 +52,19 @@ const JobForm: FC<JobFormProps> = ({
     title_description: "",
     jobField: "",
     connection: "",
-    date_CV_sent: "",
-    date_interview: "",
+    date_CV_sent: null,
+    date_interview: null,
     notes: "",
     cv: null,
   });
   const [fileId, setFileId] = useState<string>("");
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const width = "60%";
+  const navigate = useNavigate()
 
   useEffect(() => {
-    dispatch(getUserByCookie())
-  },[])
+    dispatch(getUserByCookie());
+  }, []);
 
   const handleUnarchive = async (jobId: string) => {
     try {
@@ -71,12 +86,27 @@ const JobForm: FC<JobFormProps> = ({
     }
   };
 
+  const HandlePickDateCV = (newDate: string | null) => {
+    if (newDate === null) {
+      setFormData({ ...formData, date_CV_sent: "" });
+    } else {
+      setFormData({ ...formData, date_CV_sent: newDate });
+    }
+  };
+  const HandlePickDateIV = (newDate: string | null) => {
+    if (newDate === null) {
+      setFormData({ ...formData, date_interview: "" });
+    } else {
+      setFormData({ ...formData, date_interview: newDate });
+    }
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const userId = user?._id;
     if (!userId) {
-      console.error("no userId")
-      return
+      console.error("no userId");
+      return;
     }
     const url = `/api/jobs/${userId}`;
 
@@ -85,6 +115,7 @@ const JobForm: FC<JobFormProps> = ({
         await axios.post(url, { formData, fileId });
         // Handle successful submission
         console.log("Form submitted successfully");
+        navigate("/home")
       } catch (error) {
         // Handle error
         console.error("Error submitting form", error);
@@ -121,117 +152,128 @@ const JobForm: FC<JobFormProps> = ({
   }, []);
 
   return (
-    <>
-      {type === "add" ? <FileUpload setFileId={setFileId} /> : null}
+    <Stack spacing={3}>
+      {/* {type === "add" ? <FileUpload setFileId={setFileId} /> : null} */}
       <form onSubmit={handleSubmit}>
-        <label>
-          Company Name:
-          <input
-            type="text"
-            name="company_name"
-            value={formData.company_name}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-        <label>
-          Company Description:
-          <textarea
-            name="company_description"
-            value={formData.company_description}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
+        {/* <FormControl> */}
+        <Stack spacing={3}>
+          <Box sx={{ width }}>
+            {/* <InputLabel htmlFor="company_name">Company Name</InputLabel> */}
+            <TextField
+              name="company_name"
+              label="Company Name"
+              value={formData.company_name}
+              onChange={handleChange}
+              disabled={archivedJob}
+              fullWidth
+            />
+          </Box>
 
-        <label>
-          Title:
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
+          <Box sx={{ width }}>
+            <TextField
+              label="Company Description"
+              name="company_description"
+              value={formData.company_description}
+              onChange={handleChange}
+              disabled={archivedJob}
+              multiline
+              rows={3}
+              fullWidth
+            />
+            <FormHelperText id="my-helper-text">
+              Feel free to paste the company descripton or write your own
+            </FormHelperText>
+          </Box>
+          <Box sx={{ width }}>
+            <TextField
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              disabled={archivedJob}
+              label="Title"
+              fullWidth
+            />
+          </Box>
+          <Box sx={{ width }}>
+            <TextField
+              name="title_description"
+              value={formData.title_description}
+              onChange={handleChange}
+              disabled={archivedJob}
+              label="Title Description"
+              multiline
+              minRows={3}
+              fullWidth
+            />
+            <FormHelperText id="my-helper-text">
+              Feel free to paste the title descripton or write your own
+            </FormHelperText>
+          </Box>
+          <Box sx={{ width }}>
+            <TextField
+              type="text"
+              name="jobField"
+              value={formData.jobField}
+              onChange={handleChange}
+              disabled={archivedJob}
+              label="Job Field"
+              fullWidth
+            />
+          </Box>
+          <Box sx={{ width }}>
+            <TextField
+              type="text"
+              name="connection"
+              value={formData.connection}
+              onChange={handleChange}
+              disabled={archivedJob}
+              label="Connection"
+              fullWidth
+            />
+            <FormHelperText id="my-helper-text">
+              The Person that refered you or you submitted through
+            </FormHelperText>
+          </Box>
+          <Box sx={{ width }}>
+            <DatePicker
+              label="Date CV Sent"
+              value={formData.date_CV_sent}
+              onChange={(newDate) => HandlePickDateCV(newDate)}
+              disabled={archivedJob}
+            />
+          </Box>
+          <Box sx={{ width }}>
+            <DatePicker
+              label="Date Interview"
+              value={formData.date_interview}
+              onChange={(newDate) => HandlePickDateIV(newDate)}
+              disabled={archivedJob}
+            />
+          </Box>
+          <Box sx={{ width }}>
+            <TextField
+              type="text"
+              name="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              disabled={archivedJob}
+              label="Notes"
+              multiline
+              minRows={3}
+              fullWidth
+            />
+            <FormHelperText id="my-helper-text">
+              Write anything you wish
+            </FormHelperText>
+          </Box>
+          <Box sx={{ width }}>
+            <Button variant="contained" type="submit" disabled={archivedJob}>
+              Submit
+            </Button>
+          </Box>
+        </Stack>
 
-        <label>
-          Title Description:
-          <textarea
-            name="title_description"
-            value={formData.title_description}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <label>
-          Job Field:
-          <input
-            type="text"
-            name="jobField"
-            value={formData.jobField}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <label>
-          Connection:
-          <input
-            type="text"
-            name="connection"
-            value={formData.connection}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <label>
-          Date CV Sent:
-          <input
-            type="date"
-            name="date_CV_sent"
-            value={formData.date_CV_sent}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <label>
-          Date Interview:
-          <input
-            type="date"
-            name="date_interview"
-            value={formData.date_interview}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <label>
-          Notes:
-          <textarea
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <label>
-          CV:
-          <input
-            type="file"
-            name="cv"
-            onChange={handleChange}
-            disabled={archivedJob}
-          />
-        </label>
-
-        <button type="submit" disabled={archivedJob}>
-          Submit
-        </button>
 
         {archivedJob ? (
           <>
@@ -249,7 +291,7 @@ const JobForm: FC<JobFormProps> = ({
           </>
         ) : null}
       </form>
-    </>
+    </Stack>
   );
 };
 

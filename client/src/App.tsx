@@ -7,19 +7,22 @@ import Home from "./views/home/Home";
 import SignInSide from "./views/LoginToTheSide";
 import AddJob from "./components/AddJob";
 import JobInformation from "./views/home/JobInformation";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<SignInSide/>} />
-        <Route path="/register" element={<RegisterForm />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/add-job" element={<AddJob />} />
-        <Route path="/job-info/:jobId" element={<JobInformation/>} />
-
-      </Routes>
-    </BrowserRouter>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SignInSide />} />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/add-job" element={<AddJob />} />
+          <Route path="/job-info/:jobId" element={<JobInformation />} />
+        </Routes>
+      </BrowserRouter>
+    </LocalizationProvider>
   );
 }
 
