@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
+import dayjs, { Dayjs } from "dayjs";
 
 interface FormData {
   company_name: string;
@@ -25,10 +26,10 @@ interface FormData {
   title_description: string;
   jobField: string;
   connection: string;
-  date_CV_sent: string | null;
-  date_interview: string | null;
+  date_CV_sent?: string | null | Dayjs;
+  date_interview?: string | null | Dayjs;
   notes: string;
-  cv: File | null;
+  cv?: File | null;
 }
 
 interface JobFormProps {
@@ -60,7 +61,7 @@ const JobForm: FC<JobFormProps> = ({
   const [fileId, setFileId] = useState<string>("");
   const dispatch = useAppDispatch();
   const width = "60%";
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getUserByCookie());
@@ -86,14 +87,14 @@ const JobForm: FC<JobFormProps> = ({
     }
   };
 
-  const HandlePickDateCV = (newDate: string | null) => {
+  const HandlePickDateCV = (newDate: string | null | Dayjs) => {
     if (newDate === null) {
       setFormData({ ...formData, date_CV_sent: "" });
     } else {
       setFormData({ ...formData, date_CV_sent: newDate });
     }
   };
-  const HandlePickDateIV = (newDate: string | null) => {
+  const HandlePickDateIV = (newDate: string | null | Dayjs) => {
     if (newDate === null) {
       setFormData({ ...formData, date_interview: "" });
     } else {
@@ -108,23 +109,27 @@ const JobForm: FC<JobFormProps> = ({
       console.error("no userId");
       return;
     }
-    const url = `/api/jobs/${userId}`;
+
 
     if (type === "add") {
       try {
+        const url = `/api/jobs/${userId}`;
         await axios.post(url, { formData, fileId });
         // Handle successful submission
         console.log("Form submitted successfully");
-        navigate("/home")
+        navigate("/home");
       } catch (error) {
         // Handle error
         console.error("Error submitting form", error);
       }
     } else if (type === "edit") {
       try {
+        const url = `/api/jobs/job/${jobId}/update-job`;
+        // /job/:jobId/update-job
         await axios.patch(url, { formData });
         // Handle successful submission
         console.log("Form editted successfully");
+        navigate("/home")
       } catch (error) {
         // Handle error
         console.error("Error editting form", error);
@@ -135,8 +140,26 @@ const JobForm: FC<JobFormProps> = ({
   const handleGetFormInformation = async () => {
     try {
       const { data } = await axios.get(`/api/jobs/job/${jobId}`);
-      console.log(data);
-      setFormData(data.jobDB);
+      const {jobDB} = data
+      console.log(jobDB)
+      const newCvDate = dayjs(data.jobDB.date_CV_sent);
+      const newIvDate = dayjs(data.jobDB.date_interview);
+
+      setFormData({...formData,
+        company_name: jobDB.company_name,
+        company_description: jobDB.company_description,
+        title: jobDB.title,
+        title_description: jobDB.title_description,
+        jobField: jobDB.jobField,
+        connection: jobDB.connection,
+        notes: jobDB.notes,
+        date_CV_sent: newCvDate,
+        date_interview: newIvDate
+      })
+      // setFormData({ ...formData, date_CV_sent: newCvDate });
+
+
+      // setFormData({ ...formData, date_interview: newCvIv });
       if (setArchivedJob) {
         setArchivedJob(data.jobDB.archive);
       }
@@ -151,14 +174,13 @@ const JobForm: FC<JobFormProps> = ({
     }
   }, []);
 
+
   return (
     <Stack spacing={3}>
       {/* {type === "add" ? <FileUpload setFileId={setFileId} /> : null} */}
       <form onSubmit={handleSubmit}>
-        {/* <FormControl> */}
         <Stack spacing={3}>
           <Box sx={{ width }}>
-            {/* <InputLabel htmlFor="company_name">Company Name</InputLabel> */}
             <TextField
               name="company_name"
               label="Company Name"
@@ -203,7 +225,7 @@ const JobForm: FC<JobFormProps> = ({
               disabled={archivedJob}
               label="Title Description"
               multiline
-              minRows={3}
+              rows={3}
               fullWidth
             />
             <FormHelperText id="my-helper-text">
@@ -260,7 +282,7 @@ const JobForm: FC<JobFormProps> = ({
               disabled={archivedJob}
               label="Notes"
               multiline
-              minRows={3}
+              rows={3}
               fullWidth
             />
             <FormHelperText id="my-helper-text">
@@ -273,7 +295,6 @@ const JobForm: FC<JobFormProps> = ({
             </Button>
           </Box>
         </Stack>
-
 
         {archivedJob ? (
           <>

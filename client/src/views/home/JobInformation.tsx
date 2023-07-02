@@ -6,9 +6,9 @@ import axios from "axios";
 import { useAppSelector } from "../../app/hooks";
 import { userSelector } from "../../features/user/userSlice";
 import JobForm from "../../components/JobForm";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArchiveIcon from '@mui/icons-material/Archive';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ArchiveIcon from "@mui/icons-material/Archive";
 
 const JobInformation = () => {
   const [job, setJob] = useState<any>({});
@@ -88,16 +88,22 @@ const JobInformation = () => {
             <Typography>{job.notes}</Typography>
             <Typography variant="h5">Cv file</Typography>
 
-            <Box sx={{display: 'flex', justifyContent: 'space-between', width: '60%'}}>
-              <Button 
-              startIcon={<EditIcon/>}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "60%",
+              }}
+            >
+              <Button
+                startIcon={<EditIcon />}
                 variant="contained"
                 onClick={() => setVisibleEdit(!visibleEdit)}
               >
                 Edit Job
               </Button>
               <Button
-              startIcon={<DeleteIcon/>}
+                startIcon={<DeleteIcon />}
                 variant="contained"
                 color="secondary"
                 onClick={() => handleGetConsent()}
@@ -105,7 +111,7 @@ const JobInformation = () => {
                 Delete
               </Button>
               <Button
-              startIcon={<ArchiveIcon/>}
+                startIcon={<ArchiveIcon />}
                 variant="contained"
                 color="secondary"
                 onClick={() => handleArchive(job._id)}
@@ -115,12 +121,14 @@ const JobInformation = () => {
             </Box>
 
             {visibleEdit ? (
-              <JobForm
-                type="edit"
-                jobId={job._id}
-                archivedJob={archivedJob}
-                setArchivedJob={setArchivedJob}
-              />
+              <Container sx={{my: 5}}>
+                <JobForm
+                  type="edit"
+                  jobId={job._id}
+                  archivedJob={archivedJob}
+                  setArchivedJob={setArchivedJob}
+                />
+              </Container>
             ) : null}
             {visibleConsent ? (
               <div>

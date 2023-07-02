@@ -149,3 +149,28 @@ export async function updateStatus(req, res) {
     res.status(500).send({ error: error.message });
   }
 }
+export async function updateJob(req, res) {
+  try {
+    const { jobId } = req.params;
+    if (!jobId)
+      throw new Error("no jobId found on params in updateStatus in JobsCtrl");
+    const { formData } = req.body;
+    if (!formData)
+      throw new Error("no formData found on body in updateStatus in JobsCtrl");
+    const jobDB = await JobModel.findById(jobId)
+    if (!jobDB) throw new Error("no job found in updateStatus in JobsCtrl")
+    const keysToUpdate = Object.keys(formData)
+    const valuesToUpdate = Object.values(formData)
+
+    await keysToUpdate.forEach(async (key, idx) => {
+      jobDB[key] = valuesToUpdate[idx]
+    })
+    await jobDB.save()
+    
+
+    res.send({ jobDB, ok: true });
+    // res.send({test: true, jobDB})
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+}

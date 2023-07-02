@@ -5,7 +5,8 @@ import {
   getAllJobsByUserId,
   getJobByID,
   deleteJobById,
-  updateStatus
+  updateStatus,
+  updateJob
 } from "./jobsCtrl";
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router
   .get("/job/:jobId", getJobByID)
   .put("/job/:jobId", toggleArchiveJob)
   .patch("/job/:jobId", updateStatus)
+  .patch("/job/:jobId/update-job", updateJob)
   .delete("/job/:jobId", deleteJobById);
 
 export default router;
