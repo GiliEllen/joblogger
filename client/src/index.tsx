@@ -8,7 +8,7 @@ import './index.css';
 import {ThemeProvider, createTheme}  from "@mui/material"
 import {disableReactDevTools} from "@fvilers/disable-react-devtools"
 
-if(process.env.NODE_ENV === "production") disableReactDevTools()
+// if(process.env.NODE_ENV === "production") disableReactDevTools()
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -27,13 +27,13 @@ const theme = createTheme({
 
 
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <ThemeProvider theme={theme}>
     <Provider store={store}>
       <App />
     </Provider>
     </ThemeProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
