@@ -42,17 +42,17 @@ const conn = mongoose.connection;
 //     bucketName: "cvfiles",
 //   });
 // });
-// export let gridfsBucket; 
+export let gridfsBucket; 
 
-// export let gfs = conn.once('open', () => {
-//   gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
-//   bucketName: 'uploads'
-// });
+export let gfs = conn.once('open', () => {
+  gridfsBucket = new mongoose.mongo.GridFSBucket(conn.db, {
+  bucketName: 'uploads'
+});
 
-//   gfs = Grid(conn.db, mongoose.mongo);
-//   gfs.collection('uploads');
-//   return gfs;
-// })
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+  return gfs;
+})
 
 
 import cvfilesRoutes from "./API/cvFiles/cvFilesRoutes";
@@ -62,6 +62,7 @@ import usersRoutes from "./API/users/usersRoutes";
 app.use("/api/users", usersRoutes);
 
 import jobsRoutes from "./API/jobs/jobsRoutes";
+
 app.use("/api/jobs", jobsRoutes);
 
 app.listen(PORT, () => {
