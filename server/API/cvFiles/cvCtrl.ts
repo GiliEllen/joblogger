@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 const crypto = require("crypto");
 const Grid = require("gridfs-stream");
 
-// import  {gridfsBucket, gfs}  from "../../server";
+import  {gridfsBucket, gfs}  from "../../server";
 
 const mongodb_uri = process.env.MONGO_URI;
 
