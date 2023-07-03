@@ -116,7 +116,7 @@ export async function getUserByCookie(req, res) {
 //get user by id
 export async function getUserById(req, res) {
   try {
-    const userDB = await UserModel.findById(req.params.id);
+    const userDB = await UserModel.findById(req.params.userId);
     res.send({ userDB });
   } catch (error) {
     res.status(500).send({ error: error.message });

@@ -26,6 +26,7 @@ const LoginForm = () => {
     const { data } = await axios.post(`${API_URL}/api/users/login`, { email, password });
 
     if (data.login) {
+
       navigate("/home");
     }
   };

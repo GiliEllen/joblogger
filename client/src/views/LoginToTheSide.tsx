@@ -58,8 +58,11 @@ export default function SignInSide() {
     event.preventDefault();
 
     const { data } = await axios.post(`${API_URL}/api/users/login`, { email, password });
+    const userId = data.userDB._id
+    console.log(userId)
 
     if (data.login) {
+      sessionStorage.setItem('token', userId)
       navigate("/home");
     }
   };

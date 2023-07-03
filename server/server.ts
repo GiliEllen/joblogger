@@ -16,7 +16,7 @@ const mongodb_uri = process.env.MONGO_URI;
 const PORT = process.env.PORT;
 
 app.use(express.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 // app.use(cors(corsOptions))
 app.use(cors())
 

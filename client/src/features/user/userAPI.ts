@@ -7,7 +7,8 @@ export const getUserByCookie = createAsyncThunk(
   "get-user-by-cookie",
   async (_, thunkApi) => {
     try {
-      const { data } = await axios.get(`${API_URL}/api/users/get-user-by-cookie`);
+      const userId = sessionStorage.getItem("token")
+      const { data } = await axios.get(`${API_URL}/api/users/get-user-by-cookie/${userId}`);
       if (!data)
         throw new Error(
           "Couldn't receive data from axios GET '/get-user-by-cookie' from: userAPI "
