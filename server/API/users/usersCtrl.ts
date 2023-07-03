@@ -1,5 +1,5 @@
 import express from "express";
-import UserModel, { UserValidation } from "./userModel";
+import UserModel from "./userModel";
 import bcrypt from "bcrypt";
 import jwt from "jwt-simple";
 const saltRounds = 10;
@@ -12,8 +12,8 @@ export async function register(req: express.Request, res: express.Response) {
     if (!email || !password || !firstName || !lastName || !jobField || !phoneNumber || !repeatPassword)
       throw new Error("Couldn't get all fields from req.body");
 
-    const { error } = UserValidation.validate({ email, password, firstName, lastName, jobField, phoneNumber, repeatPassword });
-    if (error) throw error;
+    // const { error } = UserValidation.validate({ email, password, firstName, lastName, jobField, phoneNumber, repeatPassword });
+    // if (error) throw error;
 
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);

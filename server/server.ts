@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import cors from "cors"
+import { corsOptions } from "./config/corsOptions";
 // import methodOverride from "method-"
 const Grid = require("gridfs-stream");
 
@@ -15,6 +17,7 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors(corsOptions))
 
 // const conn = mongoose.createConnection(mongodb_uri);
 
