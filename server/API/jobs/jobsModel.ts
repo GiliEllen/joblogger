@@ -17,10 +17,11 @@ const JobSchema = new mongoose.Schema({
   notes: String,
   status: {
     type:String,
-    enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired']
+    enum: ['In Progress', 'Denied', 'CV', 'interviewing', 'hired', 'Test', 'Applied']
   },
-  cv: Object,
-  archive: Boolean
+  cv: String,
+  archive: Boolean,
+
 });
 
 const JobModel = mongoose.model("jobs", JobSchema);

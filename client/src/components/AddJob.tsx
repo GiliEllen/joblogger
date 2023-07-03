@@ -1,16 +1,37 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
-import { useAppSelector } from "../app/hooks";
-import { userSelector } from "../features/user/userSlice";
+import { Container, Paper, Typography } from "@mui/material";
+import DrawerMenue from "./DrawerMenue";
 import JobForm from "./JobForm";
-import FileUpload from "./FileUpload";
+import formImage from "../assets/images/formImage.jpg";
 
 const AddJob = () => {
   return (
-  <>
-  <FileUpload/>
-  <JobForm type="add" />
-  </>
+    <>
+      <DrawerMenue />
+      <Container sx={{ height: "100vh" }}>
+        <Typography
+          variant="h2"
+          sx={{ my: 4, textAlign: "center", color: "primary.main" }}
+        >
+          JobLogger
+        </Typography>
+        <Typography variant="h2">Add Job</Typography>
+        <Container>
+          <Paper sx={{ padding: 5, my: 5, position: "relative" }}>
+            <JobForm type="add" />
+            <img
+              src={formImage}
+              alt="cv files"
+              style={{
+                width: "450px",
+                position: "absolute",
+                top: "0",
+                right: "0",
+              }}
+            />
+          </Paper>
+        </Container>
+      </Container>
+    </>
   );
 };
 

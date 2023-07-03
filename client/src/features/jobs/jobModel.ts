@@ -19,5 +19,6 @@ export interface Job {
   notes: string;
   status: JobStatus;
   cv?: object;
-  archive: boolean
+  archive: boolean,
+  cvObject?: any
 }
