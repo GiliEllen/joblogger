@@ -1,2 +1,2 @@
-// export const CLIENT_URL = "https://idigital-gili-v2.onrender.com"
-export const API_URL = "http://localhost:4000"
+export const CLIENT_URL = "https://joblogger-server.onrender.com"
+// export const API_URL = "http://localhost:4000"
