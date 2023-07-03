@@ -10,9 +10,6 @@ const router = express.Router();
 
 router
   .post("/upload", uploadMiddleware, uploader, saveFileToUser)
-  .get("/download/:id", (req, res) => {
-    const fileId = req.params.id;
-    downloadFileById(fileId, res);
-  });
+  .get("/download/:id", downloadFileById);
 
 export default router;

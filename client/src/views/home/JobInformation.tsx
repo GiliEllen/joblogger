@@ -83,6 +83,7 @@ const JobInformation = () => {
       <Container>
         <Paper sx={{padding: 5}} elevation={3}>
           <Container>
+            <Typography>{JSON.stringify(job)}</Typography>
             <Typography variant="h3">{job.title}</Typography>
             <Typography variant="h5">at {job.company_name}</Typography>
             <Typography>{job.company_description}</Typography>

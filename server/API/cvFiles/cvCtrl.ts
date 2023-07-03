@@ -86,8 +86,10 @@ export async function saveFileToUser(req, res) {
   res.send({ file });
 }
 
-export const downloadFileById = (fileId: string, res: express.Response) => {
+export const downloadFileById = async (req, res) => {
+  const fileId = req.params.id;
   const objectId = new mongoose.Types.ObjectId(fileId);
+  console.log(gridfsBucket.files)
 
   gridfsBucket.files.findOne({ _id: objectId }, (err, file) => {
     if (err) {
@@ -110,6 +112,31 @@ export const downloadFileById = (fileId: string, res: express.Response) => {
 
     readStream.pipe(res);
   });
+  // const file = gridfsBucket.find({"_id": fileId})
+  //   .toArray((err, files) => {
+  //     if (!files || files.length === 0) {
+  //       return res.status(404)
+  //         .json({
+  //           err: "no files exist"
+  //         });
+  //     }
+  //     gridfsBucket.openDownloadStreamByName(req.params.filename)
+  //       .pipe(res);
+  //   });
+
+  // const gridFile = await GridFile.findById(id)
+    // const file = await gridfsBucket.find({"_id": fileId})
+    // console.log(file)
+
+
+    // if (file) {
+    //   res.attachment(fileId)
+    //   // file.downloadStream(res)
+    //   res.send({file: file})
+    // } else {
+    //   // file not found
+    //   res.status(404).json({ error: 'file not found' })
+    // }
 };
 
 // Example route to download a file

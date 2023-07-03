@@ -177,7 +177,7 @@ const JobForm: FC<JobFormProps> = ({
 
   return (
     <Stack spacing={3}>
-      {/* {type === "add" ? <FileUpload setFileId={setFileId} /> : null} */}
+      {type === "add" ? <FileUpload setFileId={setFileId} /> : null}
       <Box>
       {archivedJob ? (
           <>
