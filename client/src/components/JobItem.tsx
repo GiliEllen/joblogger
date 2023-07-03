@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsisVertical,
-  faGaugeSimpleMed,
-} from "@fortawesome/free-solid-svg-icons";
-import JobForm from "./JobForm";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import {
+//   faEllipsisVertical,
+//   faGaugeSimpleMed,
+// } from "@fortawesome/free-solid-svg-icons";
+// import JobForm from "./JobForm";
 import axios from "axios";
 import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
