@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 interface RegisterFormData {
@@ -157,10 +157,10 @@ const RegisterForm: React.FC = () => {
               onChange={handleChange}
               onInput={validatePassword}
             />
-            <FontAwesomeIcon
+            {/* <FontAwesomeIcon
               icon={formData.showPassword ? faEyeSlash : faEye}
               onClick={() => togglePasswordVisibility('showPassword')}
-            />
+            /> */}
           </div>
         </label>
         </div>
@@ -196,10 +196,10 @@ const RegisterForm: React.FC = () => {
               value={formData.repeatPassword}
               onChange={handleChange}
             />
-            <FontAwesomeIcon
+            {/* <FontAwesomeIcon
               icon={formData.showRepeatPassword ? faEyeSlash : faEye}
               onClick={() => togglePasswordVisibility('showRepeatPassword')}
-            />
+            /> */}
           </div>
         </label>
       </div>
