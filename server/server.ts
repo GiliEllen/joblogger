@@ -17,7 +17,8 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
+app.use(cors())
 
 // const conn = mongoose.createConnection(mongodb_uri);
 
