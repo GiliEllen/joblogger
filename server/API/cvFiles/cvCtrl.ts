@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 const crypto = require("crypto");
 const Grid = require("gridfs-stream");
 
-import  {gridfsBucket, gfs}  from "../../server";
+// import  {gridfsBucket, gfs}  from "../../server";
 
 const mongodb_uri = process.env.MONGO_URI;
 
@@ -87,29 +87,29 @@ export async function saveFileToUser(req, res) {
 }
 
 export const downloadFileById = (fileId: string, res: express.Response) => {
-  const objectId = new mongoose.Types.ObjectId(fileId);
+  // const objectId = new mongoose.Types.ObjectId(fileId);
 
-  gridfsBucket.files.findOne({ _id: objectId }, (err, file) => {
-    if (err) {
-      console.log('Error finding file:', err);
-      return res.status(500).json({ error: 'Server error' });
-    }
+  // gridfsBucket.files.findOne({ _id: objectId }, (err, file) => {
+  //   if (err) {
+  //     console.log('Error finding file:', err);
+  //     return res.status(500).json({ error: 'Server error' });
+  //   }
 
-    if (!file) {
-      return res.status(404).json({ error: 'File not found' });
-    }
+  //   if (!file) {
+  //     return res.status(404).json({ error: 'File not found' });
+  //   }
 
-    const readStream = gridfsBucket.createReadStream({ _id: objectId });
-    readStream.on('error', (error) => {
-      console.log('Error reading file:', error);
-      return res.status(500).json({ error: 'Server error' });
-    });
+  //   const readStream = gridfsBucket.createReadStream({ _id: objectId });
+  //   readStream.on('error', (error) => {
+  //     console.log('Error reading file:', error);
+  //     return res.status(500).json({ error: 'Server error' });
+  //   });
 
-    res.set('Content-Type', file.contentType);
-    res.set('Content-Disposition', `attachment; filename="${file.filename}"`);
+  //   res.set('Content-Type', file.contentType);
+  //   res.set('Content-Disposition', `attachment; filename="${file.filename}"`);
 
-    readStream.pipe(res);
-  });
+  //   readStream.pipe(res);
+  // });
 };
 
 // Example route to download a file
