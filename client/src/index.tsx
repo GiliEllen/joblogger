@@ -6,7 +6,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import {ThemeProvider, createTheme}  from "@mui/material"
+import {disableReactDevTools} from "@fvilers/disable-react-devtools"
 
+if(process.env.NODE_ENV === "production") disableReactDevTools()
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
