@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 
 import BackgroundImageLaptop from "../assets/images/NA_October_10.jpg";
 import { Container } from "@mui/material";
+import { API_URL } from "../util/util";
 
 function Copyright(props: any) {
   return (
@@ -56,7 +57,7 @@ export default function SignInSide() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const { data } = await axios.post("/api/users/login", { email, password });
+    const { data } = await axios.post(`${API_URL}/api/users/login`, { email, password });
 
     if (data.login) {
       navigate("/home");

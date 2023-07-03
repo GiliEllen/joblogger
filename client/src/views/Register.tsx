@@ -3,6 +3,7 @@ import axios from 'axios';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../util/util';
 
 interface RegisterFormData {
   firstName: string;
@@ -98,7 +99,7 @@ const RegisterForm: React.FC = () => {
 
     try {
       console.log(formData)
-      const response = await axios.post('/api/users/register', {formData});
+      const response = await axios.post(`${API_URL}/api/users/register`, {formData});
       console.log('Registration successful:', response.data);
       if (response.data.register) {
         navigate("/home");

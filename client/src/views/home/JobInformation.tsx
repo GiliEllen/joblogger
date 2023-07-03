@@ -17,6 +17,7 @@ import JobForm from "../../components/JobForm";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArchiveIcon from "@mui/icons-material/Archive";
+import { API_URL } from "../../util/util";
 
 const JobInformation = () => {
   const [job, setJob] = useState<any>({});
@@ -24,7 +25,7 @@ const JobInformation = () => {
 
   const handleGetJobInformation = async () => {
     try {
-      const { data } = await axios.get(`/api/jobs/job/${jobId}`);
+      const { data } = await axios.get(`${API_URL}/api/jobs/job/${jobId}`);
       const { jobDB, error } = data;
       if (error) throw error;
       setJob(jobDB);
@@ -52,7 +53,7 @@ const JobInformation = () => {
     try {
       console.log(deleteConsent);
       if (deleteConsent === "Yes") {
-        const { data } = await axios.delete(`/api/jobs/job/${jobId}`);
+        const { data } = await axios.delete(`${API_URL}/api/jobs/job/${jobId}`);
         console.log(data);
       }
     } catch (error) {
@@ -64,7 +65,7 @@ const JobInformation = () => {
     try {
       if (user) {
         const userId = user?._id;
-        const { data } = await axios.put(`/api/jobs/job/${jobId}`);
+        const { data } = await axios.put(`${API_URL}/api/jobs/job/${jobId}`);
         console.log(data);
         setArchivedJob(data.archive);
         if (data.archive) {

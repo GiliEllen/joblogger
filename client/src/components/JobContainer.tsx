@@ -9,6 +9,7 @@ import { archiveJob, jobArraySelector } from "../features/jobs/jobSlice";
 import { Container, Paper, Typography, Grid } from "@mui/material";
 import { GridFilterModel, DataGrid } from "@mui/x-data-grid";
 import Filter from "./Filter";
+import { API_URL } from "../util/util";
 
 const JobContainer = () => {
   // const [jobs, setJobs] = useState([]);
@@ -32,7 +33,7 @@ const JobContainer = () => {
     try {
       if (user) {
         const userId = user?._id;
-        const { data } = await axios.get(`/api/jobs/user/${userId}`);
+        const { data } = await axios.get(`${API_URL}/api/jobs/user/${userId}`);
         console.log(data);
         // setJobs(data.jobsDB.jobs);
         dispatch(getAllJobs({ userId }));

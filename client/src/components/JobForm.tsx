@@ -18,6 +18,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
+import { API_URL } from "../util/util";
 
 interface FormData {
   company_name: string;
@@ -69,7 +70,7 @@ const JobForm: FC<JobFormProps> = ({
 
   const handleUnarchive = async (jobId: string) => {
     try {
-      const { data } = await axios.put(`/api/jobs/job/${jobId}`);
+      const { data } = await axios.put(`${API_URL}/api/jobs/job/${jobId}`);
       if (setArchivedJob) {
         setArchivedJob(false);
       }
@@ -113,7 +114,7 @@ const JobForm: FC<JobFormProps> = ({
 
     if (type === "add") {
       try {
-        const url = `/api/jobs/${userId}`;
+        const url = `${API_URL}/api/jobs/${userId}`;
         await axios.post(url, { formData, fileId });
         // Handle successful submission
         console.log("Form submitted successfully");
@@ -124,7 +125,7 @@ const JobForm: FC<JobFormProps> = ({
       }
     } else if (type === "edit") {
       try {
-        const url = `/api/jobs/job/${jobId}/update-job`;
+        const url = `${API_URL}/api/jobs/job/${jobId}/update-job`;
         // /job/:jobId/update-job
         await axios.patch(url, { formData });
         // Handle successful submission
@@ -139,7 +140,7 @@ const JobForm: FC<JobFormProps> = ({
 
   const handleGetFormInformation = async () => {
     try {
-      const { data } = await axios.get(`/api/jobs/job/${jobId}`);
+      const { data } = await axios.get(`${API_URL}/api/jobs/job/${jobId}`);
       const {jobDB} = data
       console.log(jobDB)
       const newCvDate = dayjs(data.jobDB.date_CV_sent);

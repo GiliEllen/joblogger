@@ -10,13 +10,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import axios from "axios";
 import { useAppDispatch } from "../app/hooks";
 import { logout } from "../features/user/userSlice";
+import { API_URL } from "../util/util";
 
 const DrawerMenue = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch()
 
   const handleLogout = async () => {
-    const {data} = await axios.get("/api/users/logout");
+    const {data} = await axios.get(`${API_URL}/api/users/logout`);
     dispatch(logout())
   }
 

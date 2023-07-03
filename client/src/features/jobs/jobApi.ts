@@ -1,13 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Job } from "./jobModel";
+import { API_URL } from "../../util/util";
 
 
 export const getAllJobs = createAsyncThunk(
   "get-all-jobs",
   async ({ userId }: { userId: string }, thunkApi) => {
     try {
-      const { data } = await axios.get(`/api/jobs/user/${userId}`);
+      const { data } = await axios.get(`${API_URL}/api/jobs/user/${userId}`);
       if (!data)
         throw new Error(
           "Couldn't receive data from axios GET '/api/jobs/user/userId' from: jobsAPI "

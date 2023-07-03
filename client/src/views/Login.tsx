@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../util/util";
 
 // interface LoginFormProps {
 //   onLogin: (email: string, password: string) => void;
@@ -22,7 +23,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data } = await axios.post("/api/users/login", { email, password });
+    const { data } = await axios.post(`${API_URL}/api/users/login`, { email, password });
 
     if (data.login) {
       navigate("/home");

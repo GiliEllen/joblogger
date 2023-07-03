@@ -12,6 +12,7 @@ import { Paper, Typography, Button, Container, Grid } from "@mui/material";
 import CardLinesButtons from "./CardLinesButtons";
 import { Link } from "react-router-dom";
 import ProgressBar, { Status } from "./LinearProgressStatus";
+import { API_URL } from "../util/util";
 
 interface JobItemProps {
   item: any;
@@ -64,7 +65,7 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
     try {
       console.log(deleteConsent);
       if (deleteConsent === "Yes") {
-        const { data } = await axios.delete(`/api/jobs/job/${jobId}`);
+        const { data } = await axios.delete(`${API_URL}/api/jobs/job/${jobId}`);
         console.log(data);
       }
     } catch (error) {
@@ -76,7 +77,7 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
     try {
       if (user) {
         const userId = user?._id;
-        const { data } = await axios.put(`/api/jobs/job/${jobId}`);
+        const { data } = await axios.put(`${API_URL}/api/jobs/job/${jobId}`);
         console.log(data);
         setArchivedJob(data.archive);
         if (data.archive) {
@@ -114,7 +115,7 @@ const JobItem: FC<JobItemProps> = ({ item, cv }) => {
       if (newStatus === status) return;
       setStatusDisplay(newStatus);
       const jobId = _id;
-      const { data } = await axios.patch(`/api/jobs/job/${jobId}`, {
+      const { data } = await axios.patch(`${API_URL}/api/jobs/job/${jobId}`, {
         status: newStatus,
       });
       if (data.ok) {

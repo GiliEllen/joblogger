@@ -5,6 +5,7 @@ import { useAppSelector } from "../app/hooks";
 import { userSelector } from "../features/user/userSlice";
 // import { Form, Row, Col, Button } from 'react-bootstrap';
 // import { API_URL } from '../utils/constants';
+import { API_URL } from "../util/util";
 
 const FileUpload = ({ props, setFileId }: any) => {
   const [file, setFile] = useState<any>(null); // state for storing actual image
