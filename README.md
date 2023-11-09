@@ -2,6 +2,11 @@
 
 JobLogger is a full-stack web application developed for job seekers to keep track of their job applications, subscriptions, and related notes. It allows users to manage their job applications efficiently, add notes for each job, and update the application status. Users can also archive or delete jobs based on their preferences. The application is built using React.js, Node.js, Express, MongoDB, and Redux technologies.
 
+## demo
+Click here for the demo app.
+https://joblogger-client.onrender.com/
+
+
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
