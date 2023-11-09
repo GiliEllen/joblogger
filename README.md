@@ -77,6 +77,8 @@ The React development server will run on `http://localhost:3000`.
 - **Custom Points:** Users can add custom points or tags to job applications for better organization and filtering.
 - **Enhanced User Profile:** Users can customize their profiles, add social media links, and showcase their skills and experiences.
 
+- importnat! make sure you add an env file, that contains: PORT=8000 MONGO_URI="YOUR MONGO URI HERE" JWT_SECRET="YOUR SECRET HERE" otherwise this won't work
+
 ## Contributing
 
 We welcome contributions to the JobLogger project. If you would like to contribute, please fork the repository and create a pull request with your changes. Be sure to follow the [code of conduct](CODE_OF_CONDUCT.md) and [contribution guidelines](CONTRIBUTING.md).
